@@ -1,8 +1,0 @@
-@CHARSET "UTF-8";
-
-/* layout  */
-.layout-header{height:4vh; width:100vw; background-color:oldlace;}
-.layout-contents{height:92vh; width:100vw; background-color:aliceblue;}
-.layout-contents > .lnb {width:220px;}
-.layout-footer{height:4vh; width:100vw; background-color:oldlace;}
-
