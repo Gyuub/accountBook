@@ -1,4 +1,4 @@
-package com.gyub.accountbook.member.domain;
+package com.gyub.accountbook.web.member.domain;
 
 import javax.persistence.Entity;
 

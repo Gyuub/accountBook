@@ -1,7 +1,7 @@
 package com.gyub.accountbook.member.service;
 
-import com.gyub.accountbook.member.domain.Member;
-import com.gyub.accountbook.member.repository.MemberRepository;
+import com.gyub.accountbook.web.member.domain.Member;
+import com.gyub.accountbook.web.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

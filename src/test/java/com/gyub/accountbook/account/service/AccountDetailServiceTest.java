@@ -1,15 +1,21 @@
 package com.gyub.accountbook.account.service;
 
-import com.gyub.accountbook.account.domain.Account;
-import com.gyub.accountbook.account.domain.detail.AccountDetail;
+import com.gyub.accountbook.global.dto.account.AccountDetailDto;
+import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
 
+import com.gyub.accountbook.web.account.domain.detail.Category;
+import com.gyub.accountbook.web.account.service.AccountDetailService;
+import com.gyub.accountbook.web.account.service.AccountService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 
 @SpringBootTest
@@ -31,7 +37,7 @@ public class AccountDetailServiceTest {
     @Test
     public void 가계부_내역_저장() {
         //Given
-        Account account = accountService.findOne(72L);
+        Account account = accountService.findOne(1L);
 
 
         AccountDetail accountDetail = AccountDetail.builder()
@@ -43,12 +49,29 @@ public class AccountDetailServiceTest {
                 .build();
 
         //When
-
         Long saveId = accountDetailService.save(accountDetail);//내역 저장
 
         //Then
-        Assertions.assertEquals(accountDetail, accountDetailService.findOne(saveId));
+        assertSame(accountDetail, accountDetailService.findOne(saveId));
 
+    }
+
+    @Test
+    public void 가계부_내역_수정(){
+
+        //Given
+        AccountDetailDto detailDto = new AccountDetailDto();
+        detailDto.setId(4L);
+        detailDto.setAmount(30000);
+        detailDto.setTitle("제목 변경 테스트");
+        detailDto.setContents("내용 변경 테스트 10000 - > 30000으로 변경");
+
+        //When
+        accountDetailService.update(detailDto);
+
+        //Then
+        assertEquals(detailDto.getAmount(),
+                accountDetailService.findOne(detailDto.getId()).getAmount());
     }
 
 

@@ -1,7 +1,7 @@
-package com.gyub.accountbook.account.service;
+package com.gyub.accountbook.web.account.service;
 
-import com.gyub.accountbook.account.domain.Account;
-import com.gyub.accountbook.account.repository.AccountRepository;
+import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

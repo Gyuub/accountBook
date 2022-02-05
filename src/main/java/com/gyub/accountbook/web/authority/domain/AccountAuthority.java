@@ -1,7 +1,7 @@
-package com.gyub.accountbook.authority.domain;
+package com.gyub.accountbook.web.authority.domain;
 
-import com.gyub.accountbook.account.domain.Account;
-import com.gyub.accountbook.member.domain.Member;
+import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.member.domain.Member;
 
 import javax.persistence.*;
 
@@ -11,11 +11,11 @@ public class AccountAuthority {
     @Column(name = "authority_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

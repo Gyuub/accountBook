@@ -1,4 +1,4 @@
-package com.gyub.accountbook.authority.repository;
+package com.gyub.accountbook.web.authority.repository;
 
 import org.springframework.stereotype.Repository;
 

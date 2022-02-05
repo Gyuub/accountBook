@@ -1,6 +1,6 @@
-package com.gyub.accountbook.account.domain;
+package com.gyub.accountbook.web.account.domain;
 
-import com.gyub.accountbook.account.domain.detail.AccountDetail;
+import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
 import lombok.Getter;
 
 import javax.persistence.*;

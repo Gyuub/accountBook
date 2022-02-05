@@ -1,4 +1,4 @@
-package com.gyub.accountbook.account.domain.detail;
+package com.gyub.accountbook.web.account.domain.detail;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

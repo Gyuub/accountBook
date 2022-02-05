@@ -1,8 +1,8 @@
-package com.gyub.accountbook.account.service;
+package com.gyub.accountbook.web.account.service;
 
-import com.gyub.accountbook.account.domain.detail.AccountDetail;
-import com.gyub.accountbook.account.repository.AccountDetailRepository;
-import com.gyub.accountbook.account.repository.AccountRepository;
+import com.gyub.accountbook.global.dto.account.AccountDetailDto;
+import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
+import com.gyub.accountbook.web.account.repository.AccountDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +32,11 @@ public class AccountDetailService {
     }
 
     //내역 수정
-    public void update(AccountDetail accountDetail){
-
+    public void update(AccountDetailDto detailDto){
+        AccountDetail accountDetail = findOne(detailDto.getId());
+        accountDetail.updateAccountDetail(detailDto);
     }
     //내역 삭제
+
 
 }

@@ -1,6 +1,6 @@
-package com.gyub.accountbook.member.repository;
+package com.gyub.accountbook.web.member.repository;
 
-import com.gyub.accountbook.member.domain.Member;
+import com.gyub.accountbook.web.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

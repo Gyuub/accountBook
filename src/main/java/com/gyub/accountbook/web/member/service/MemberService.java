@@ -1,8 +1,7 @@
-package com.gyub.accountbook.member.service;
+package com.gyub.accountbook.web.member.service;
 
-import com.gyub.accountbook.member.domain.Member;
-import com.gyub.accountbook.member.repository.MemberRepository;
-import com.gyub.accountbook.member.repository.MemberRepositoryBack;
+import com.gyub.accountbook.web.member.domain.Member;
+import com.gyub.accountbook.web.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

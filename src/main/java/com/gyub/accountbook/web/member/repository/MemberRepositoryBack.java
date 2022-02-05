@@ -1,8 +1,7 @@
-package com.gyub.accountbook.member.repository;
+package com.gyub.accountbook.web.member.repository;
 
-import com.gyub.accountbook.member.domain.Member;
+import com.gyub.accountbook.web.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;

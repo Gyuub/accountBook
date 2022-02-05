@@ -1,6 +1,7 @@
 package com.gyub.accountbook.account.service;
 
-import com.gyub.accountbook.account.domain.Account;
+import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.account.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

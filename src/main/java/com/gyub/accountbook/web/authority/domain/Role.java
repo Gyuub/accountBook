@@ -1,4 +1,4 @@
-package com.gyub.accountbook.authority.domain;
+package com.gyub.accountbook.web.authority.domain;
 
 public enum Role {
     OWNER,// 가계부 주인
