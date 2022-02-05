@@ -1,4 +1,4 @@
-package com.gyub.accountbook.domain;
+package com.gyub.accountbook.web.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
