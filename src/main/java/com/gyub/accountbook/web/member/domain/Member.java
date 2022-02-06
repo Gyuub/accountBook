@@ -1,7 +1,7 @@
 package com.gyub.accountbook.web.member.domain;
 
 
-import com.gyub.accountbook.web.authority.domain.AccountAuthority;
+import com.gyub.accountbook.web.authority.domain.Authority;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -16,6 +16,12 @@ public class Member{
     private String email;
     private String nickname;
 
+
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Authority> authoritys = new ArrayList<>();
+
+    //==생성자메소드==//
     public Member() {}
 
     public Member(String email, String nickname) {
@@ -23,7 +29,5 @@ public class Member{
         this.nickname = nickname;
     }
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<AccountAuthority> authoritys = new ArrayList<>();
 
 }

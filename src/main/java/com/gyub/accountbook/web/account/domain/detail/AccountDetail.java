@@ -2,19 +2,17 @@ package com.gyub.accountbook.web.account.domain.detail;
 
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
 import com.gyub.accountbook.web.account.domain.Account;
-import com.gyub.accountbook.web.domain.BaseTimeEntity;
+import com.gyub.accountbook.global.domain.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class AccountDetail extends BaseTimeEntity {
+public class AccountDetail extends BaseEntity {
 
     @Id
     @GeneratedValue

@@ -31,7 +31,7 @@ public class AccountDetailServiceTest {
     @DisplayName("가계부 내역 저장하기전 작업")
     public void 가계부_생성(){
         Account account = new Account("가계부1");
-        accountService.save(account); //가계부 저장
+        //accountService.save(account); //가계부 저장
     }
 
     @Test

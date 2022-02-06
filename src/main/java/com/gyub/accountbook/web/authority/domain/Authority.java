@@ -6,7 +6,7 @@ import com.gyub.accountbook.web.member.domain.Member;
 import javax.persistence.*;
 
 @Entity
-public class AccountAuthority {
+public class Authority {
     @Id @GeneratedValue
     @Column(name = "authority_id")
     private Long id;
@@ -21,5 +21,19 @@ public class AccountAuthority {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+    //==생성자 메소드==//
+
+    public Authority(Member member, Account account, Role role) {
+        this.member = member;
+        this.account = account;
+        this.role = role;
+    }
+
+    public Authority() {
+    }
+
+    //==비즈니스 로직==//
 
 }

@@ -5,6 +5,7 @@ import com.gyub.accountbook.web.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +18,7 @@ public class MemberServiceTest {
     MemberService memberService;
 
     @Test
+    @Rollback(value = false)
     public void 회원가입(){
         //Given
         Member member = new Member("test@naver.com", "GYub");
@@ -25,7 +27,7 @@ public class MemberServiceTest {
         Long saveId = memberService.join(member);
 
         //Then
-        assertEquals(member, memberService.findOne(saveId));
+        assertSame(member, memberService.findOne(saveId));
     }
 
     @Test
