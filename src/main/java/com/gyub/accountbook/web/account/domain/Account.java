@@ -38,4 +38,14 @@ public class Account extends BaseEntity {
     public void delete(){
         this.deleted = true;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "createDate=" + createDate +
+                ", modifyDate=" + modifyDate +
+                ", deleted=" + deleted +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
