@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
-    List<Authority> findByMemeber(Long memberId);
+
 }

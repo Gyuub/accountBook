@@ -1,6 +1,7 @@
 package com.gyub.accountbook.web.authority.service;
 
 import com.gyub.accountbook.web.authority.domain.Authority;
+import com.gyub.accountbook.web.authority.repository.AuthorityQueryRepository;
 import com.gyub.accountbook.web.authority.repository.AuthorityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 public class AuthorityService {
 
     private final AuthorityRepository authorityRepository;
+    private final AuthorityQueryRepository authorityQueryRepository;
 
     //==조회==//
     public Authority findOne(Long id){
@@ -20,6 +22,6 @@ public class AuthorityService {
     }
 
     public List<Authority> findByMemeber(Long memberId){
-        return authorityRepository.findByMemeber(memberId);
+        return authorityQueryRepository.test(memberId);
     }
 }
