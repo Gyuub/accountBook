@@ -3,7 +3,9 @@ package com.gyub.accountbook.web.account.domain;
 import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
 import com.gyub.accountbook.web.member.domain.Member;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
+@NoArgsConstructor
 public class Account extends BaseEntity {
 
     @Id
@@ -26,17 +29,19 @@ public class Account extends BaseEntity {
     private List<AccountDetail> accountDetails = new ArrayList<>();
 
 
-    public Account() {
-    }
-
-    public Account(String name) {
+    @Builder
+    public Account(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
-
 
     //==비즈니스 로직==//
     public void delete(){
         this.deleted = true;
+    }
+
+    public void update(String name){
+        this.name = name;
     }
 
     @Override

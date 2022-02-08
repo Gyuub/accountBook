@@ -5,6 +5,7 @@ import com.gyub.accountbook.web.account.repository.AccountRepository;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
 import com.gyub.accountbook.web.authority.repository.AuthorityRepository;
+import com.gyub.accountbook.web.authority.service.AuthorityService;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 public class AccountService {
     private final MemberService memberService;
     private final AccountRepository accountRepository;
-    private final AuthorityRepository authorityRepository;
+    private final AuthorityService authorityService;
 
     //가계부 생성
     public Long save(Long memberId, Account account ){
@@ -31,9 +32,28 @@ public class AccountService {
 
         //권한
         Authority authority = new Authority(member, account, Role.OWNER);
-        authorityRepository.save(authority);
+        authorityService.save(authority);
 
         return account.getId();
+    }
+
+    //가계부 수정
+    public void update(Long memberId, Long accountId, String name){
+        if(!authorityService.isAuthorityOwner(memberId, accountId)){
+            throw new IllegalStateException("수정 권한이 없는 가계부 입니다.");
+        }
+        Account account = findOne(accountId);
+        account.update(name);
+    }
+
+
+    //가계부 삭제
+    public void delete(Long memberId, Long accountId){
+        if(!authorityService.isAuthorityOwner(memberId, accountId)){
+            throw new IllegalStateException("삭제 권한이 없는 가계부 입니다.");
+        }
+        Account account = findOne(accountId);
+        account.delete();
     }
 
     //가계부 조회
@@ -44,13 +64,5 @@ public class AccountService {
     public List<Account> findAccounts(){
         return accountRepository.findAll();
     }
-
-    //가계부 삭제
-    public void delete(Long id){
-        Account account = findOne(id);
-        account.delete();
-    }
-
-
 }
 

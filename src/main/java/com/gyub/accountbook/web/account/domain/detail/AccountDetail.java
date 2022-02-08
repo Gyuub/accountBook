@@ -16,7 +16,7 @@ public class AccountDetail extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "account_deatil_id")
+    @Column(name = "account_detail_id")
     private Long id;
 
     private String title;
@@ -34,8 +34,9 @@ public class AccountDetail extends BaseEntity {
 
     //==생성자 패턴==//
     @Builder
-    public AccountDetail(String title, String contents, Integer amount,
+    public AccountDetail(Long id,String title, String contents, Integer amount,
                          String writer, Account account, Category category) {
+        this.id = id;
         this.title = title;
         this.contents = contents;
         this.amount = amount;
@@ -45,9 +46,13 @@ public class AccountDetail extends BaseEntity {
     }
 
     //==비즈니스 로직==//
-    public void updateAccountDetail(AccountDetailDto dto){
-        this.title = dto.getTitle();
-        this.contents = dto.getContents();
-        this.amount = dto.getAmount();
+    public void update(String title, String contents, Integer amount){
+        this.title = title;
+        this.contents = contents;
+        this.amount = amount;
+    }
+
+    public void delete(){
+        this.deleted = true;
     }
 }

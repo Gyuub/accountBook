@@ -20,6 +20,20 @@ public class AccountDetailService {
         accountDetailRepository.save(accountDetail);
         return accountDetail.getId();
     }
+    //내역 수정
+    public void update(AccountDetail accountDetail){
+        AccountDetail findDetail = findOne(accountDetail.getId());
+        findDetail.update(
+            accountDetail.getTitle()
+            , accountDetail.getContents()
+            , accountDetail.getAmount()
+        );
+    }
+    //내역 삭제
+    public void delete(Long accountDetailId){
+        AccountDetail accountDetail = findOne(accountDetailId);
+        accountDetail.delete();
+    }
 
     //내역 조회
     public AccountDetail findOne(Long accountDetailId){
@@ -31,12 +45,7 @@ public class AccountDetailService {
         return accountDetailRepository.findAll();
     }
 
-    //내역 수정
-    public void update(AccountDetailDto detailDto){
-        AccountDetail accountDetail = findOne(detailDto.getId());
-        accountDetail.updateAccountDetail(detailDto);
-    }
-    //내역 삭제
+
 
 
 }
