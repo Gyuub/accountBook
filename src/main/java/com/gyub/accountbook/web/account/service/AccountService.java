@@ -31,7 +31,7 @@ public class AccountService {
         accountRepository.save(account);
 
         //권한
-        authorityService.save(member, account);
+        authorityService.save(member, account, Role.OWNER);
 
         return account.getId();
     }
