@@ -22,7 +22,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AuthorityService authorityService;
 
-    //가계부 생성
+
     public Long save(Long memberId, Account account ){
         //사용자 조회
         Member member = memberService.findOne(memberId);
@@ -31,8 +31,7 @@ public class AccountService {
         accountRepository.save(account);
 
         //권한
-        Authority authority = new Authority(member, account, Role.OWNER);
-        authorityService.save(authority);
+        authorityService.save(member, account);
 
         return account.getId();
     }

@@ -1,9 +1,11 @@
 package com.gyub.accountbook.web.authority.service;
 
+import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
 import com.gyub.accountbook.web.authority.repository.AuthorityQueryRepository;
 import com.gyub.accountbook.web.authority.repository.AuthorityRepository;
+import com.gyub.accountbook.web.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,8 @@ public class AuthorityService {
         return isOwner(memberId, accountId);
     }
 
-    public void save(Authority authority){
+    public void save(Member member, Account account){
+        Authority authority = new Authority(member,account , Role.OWNER);
         validateDuplicate(authority);
         authorityRepository.save(authority);
     }
