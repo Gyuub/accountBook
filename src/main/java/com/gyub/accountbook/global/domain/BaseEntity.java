@@ -5,10 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,8 +21,13 @@ public abstract class BaseEntity {
     @Column(name = "modify_date")
     protected LocalDateTime modifyDate;
 
-    @Basic
-    @Column(name = "delete_yn")
-    protected boolean deleted;
+
+    @Column(name = "delete_yn",length = 1)
+    protected char deleteFlag;
+
+    @PrePersist
+    public void prePersist() {
+        this.deleteFlag = 'N';
+    }
 
 }

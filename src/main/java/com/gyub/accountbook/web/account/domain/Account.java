@@ -37,7 +37,7 @@ public class Account extends BaseEntity {
 
     //==비즈니스 로직==//
     public void delete(){
-        this.deleted = true;
+        this.deleteFlag = 'Y';
     }
 
     public void update(String name){
@@ -49,7 +49,7 @@ public class Account extends BaseEntity {
         return "Account{" +
                 "createDate=" + createDate +
                 ", modifyDate=" + modifyDate +
-                ", deleted=" + deleted +
+                ", deleteFlag=" + deleteFlag +
                 ", name='" + name + '\'' +
                 '}';
     }

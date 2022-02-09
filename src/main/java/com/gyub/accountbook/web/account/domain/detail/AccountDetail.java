@@ -53,6 +53,17 @@ public class AccountDetail extends BaseEntity {
     }
 
     public void delete(){
-        this.deleted = true;
+        this.deleteFlag = 'Y';
+    }
+
+    @Override
+    public String toString() {
+        return "AccountDetail{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", amount=" + amount +
+                ", writer='" + writer + '\'' +
+                '}';
     }
 }

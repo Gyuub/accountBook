@@ -37,7 +37,7 @@ public class AuthorityService {
     }
 
     public void save(Member member, Account account){
-        Authority authority = new Authority(member,account , Role.OWNER);
+        Authority authority = new Authority(member, account , Role.OWNER);
         validateDuplicate(authority);
         authorityRepository.save(authority);
     }
