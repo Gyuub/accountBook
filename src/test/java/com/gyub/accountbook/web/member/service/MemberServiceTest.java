@@ -1,4 +1,4 @@
-package com.gyub.accountbook.member.service;
+package com.gyub.accountbook.web.member.service;
 
 import com.gyub.accountbook.global.dto.member.ModifyMemberDto;
 import com.gyub.accountbook.web.member.domain.Member;
@@ -20,28 +20,27 @@ public class MemberServiceTest {
 
 
     @Test
-    public void 테스트명() {
-        Member member = Member.builder()
-                .email("test@naver.com")
-                .nickname("GYub2")
-                .password("1234")
-                .build();
-
-
-    }
-
-    @Test
     @Rollback(value = false)
     public void 회원가입() {
         //Given
         Member member = Member.builder()
+                .email("test@naver.com")
+                .nickname("GYub1")
+                .password("1234")
+                .build();
+
+        //When
+        memberService.join(member);
+
+        Member member2 = Member.builder()
                 .email("test@naver.com")
                 .nickname("GYub2")
                 .password("1234")
                 .build();
 
         //When
-        memberService.join(member);
+        memberService.join(member2);
+
 
         //Then
         assertSame(member, memberService.findOne(member.getId()));

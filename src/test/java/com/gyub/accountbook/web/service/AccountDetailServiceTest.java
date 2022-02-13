@@ -1,4 +1,4 @@
-package com.gyub.accountbook.account.service;
+package com.gyub.accountbook.web.service;
 
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
 import com.gyub.accountbook.web.account.domain.Account;
@@ -44,7 +44,8 @@ public class AccountDetailServiceTest {
 
 
         AccountDetail accountDetail = AccountDetail.builder()
-                .account(account)
+                //.account(account)
+                .account(Account.builder().id(3L).build())
                 .title("가계부 내역 제목")
                 .contents("중국집가서 당면을 먹었다. like 중국당면")
                 .writer("테스터")
@@ -96,3 +97,4 @@ public class AccountDetailServiceTest {
 
 
 }
+

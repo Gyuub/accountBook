@@ -1,19 +1,24 @@
-package com.gyub.accountbook.account.service;
+package com.gyub.accountbook.web.service;
 
 import com.gyub.accountbook.global.dto.account.AccountDto;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.account.service.AccountService;
+import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.service.AuthorityService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 public class AccountServiceTest {
     @Autowired
     AccountService accountService;
@@ -25,9 +30,9 @@ public class AccountServiceTest {
     @Rollback(value = false)
     public void 가계부_생성(){
         //Given
-        Long memberId = 2L;
+        Long memberId = 1L;
         Account account = Account.builder()
-                                .name("테스트 가계부2")
+                                .name("나만의 가계뿌")
                                 .build();
 
         //When
@@ -72,6 +77,16 @@ public class AccountServiceTest {
 
     @Test
     public void 가계부_목록_조회(){
+        //Given
+        Long memberId = 1L;
+
+        //When
+        List<Authority> authorities = authorityService.findByMemeber(memberId);
+
+        //Then
+        log.debug("======================");
+        authorities.stream().forEach(authority -> log.debug(authority.getAccount().getName()));
+        log.debug("======================");
     }
 
     public void 가계부_목록_조건_조회(){
