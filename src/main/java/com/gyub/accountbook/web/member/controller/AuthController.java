@@ -4,7 +4,6 @@ import com.gyub.accountbook.global.dto.member.LoginMemberDto;
 import com.gyub.accountbook.global.dto.member.TokenMemberDto;
 import com.gyub.accountbook.global.util.jwt.JwtFilter;
 import com.gyub.accountbook.global.util.jwt.TokenProvider;
-import com.gyub.accountbook.web.member.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,16 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
-
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenMemberDto> authenticateMember(@RequestBody LoginMemberDto memberDto) {
@@ -37,9 +31,9 @@ public class AuthController {
                 = new UsernamePasswordAuthenticationToken(memberDto.getEmail(), memberDto.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        String jwt = tokenProvider.createToken(authentication);
+        String jwt = tokenProvider.createToken(authenticationToken);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
