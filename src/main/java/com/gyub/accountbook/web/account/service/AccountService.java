@@ -23,6 +23,7 @@ public class AccountService {
     private final AuthorityService authorityService;
 
 
+    @Transactional
     public Long save(Long memberId, Account account ){
         //사용자 조회
         Member member = memberService.findOne(memberId);
@@ -37,6 +38,7 @@ public class AccountService {
     }
 
     //가계부 수정
+    @Transactional
     public void update(Long memberId, Long accountId, String name){
         if(!authorityService.isAuthorityOwner(memberId, accountId)){
             throw new IllegalStateException("수정 권한이 없는 가계부 입니다.");
@@ -47,6 +49,7 @@ public class AccountService {
 
 
     //가계부 삭제
+    @Transactional
     public void delete(Long memberId, Long accountId){
         if(!authorityService.isAuthorityOwner(memberId, accountId)){
             throw new IllegalStateException("삭제 권한이 없는 가계부 입니다.");
@@ -56,6 +59,7 @@ public class AccountService {
     }
 
     //가계부 조회
+    @Transactional(readOnly = true)
     public Account findOne(Long accountId){
         return accountRepository.findById(accountId)
                 .orElseGet(() -> new Account());

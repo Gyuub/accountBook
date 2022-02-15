@@ -1,6 +1,5 @@
-package com.gyub.accountbook.global.util.jwt;
+package com.gyub.accountbook.global.configuration.jwt;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;

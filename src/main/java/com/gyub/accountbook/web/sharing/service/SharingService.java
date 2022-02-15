@@ -17,7 +17,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class SharingService {
 
     private final SharingRepository sharingRepository;
@@ -26,16 +25,18 @@ public class SharingService {
     private final AccountService accountService;
     private final AuthorityService authorityService;
 
+    @Transactional(readOnly = true)
     public Sharing findOne(Long sharingId) {
         return sharingRepository.findById(sharingId)
                 .orElseGet(() -> new Sharing());
     }
-
+    @Transactional(readOnly = true)
     public List<Sharing> findByAll() {
         return sharingRepository.findAll();
     }
 
     //공유 신청
+    @Transactional
     public Long invite(Long fromMemberId, Long toMemberId, Long accountId) {
         Sharing sharing = Sharing.builder()
                 .toMember(Member.builder().id(toMemberId).build())
@@ -49,6 +50,7 @@ public class SharingService {
     }
 
     //공유 결과 응답
+    @Transactional
     public void replyInvite(Long sharingId, SharingState sharingState) {
         Sharing findSharing = findOne(sharingId);
         findSharing.reply(sharingState);
@@ -65,14 +67,16 @@ public class SharingService {
     }
 
     //공유 관계 삭제
+    @Transactional
     public void delete(Long sharingId) {
-        Sharing sharing = findOne(sharingId);
+        Sharing sharing = sharingRepository.findById(sharingId).orElse(null);
         sharing.delete();
     }
 
     //공유 신청 취소
+    @Transactional
     public void cancelInvite(Long sharingId) {
-        Sharing sharing = findOne(sharingId);
+        Sharing sharing = sharingRepository.findById(sharingId).orElse(null);
         sharingRepository.delete(sharing);
     }
 

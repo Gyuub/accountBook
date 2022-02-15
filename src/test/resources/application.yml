@@ -1,3 +1,6 @@
+server:
+  port: 9090
+
 spring:
   datasource:
     url: jdbc:h2:tcp://localhost/~/accountbook
@@ -5,15 +8,22 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  sql:
+    init:
+      mode: always
 
   jpa:
     hibernate:
-      #ddl-auto: create
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-logging.level:
-  org.hibernate.SQL: debug
-  #org.hibernate.type: trace
+    defer-datasource-initialization: true #테이블 생성전, data.sql 실행되는 문제 해결
+
+logging:
+  level:
+    com.gyub: debug
+    org.springframework: debug
+    org.hibernate.SQL: debug
+    #org.hibernate.type: trace

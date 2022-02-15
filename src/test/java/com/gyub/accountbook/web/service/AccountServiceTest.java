@@ -81,7 +81,7 @@ public class AccountServiceTest {
         Long memberId = 1L;
 
         //When
-        List<Authority> authorities = authorityService.findByMemeber(memberId);
+        List<Authority> authorities = authorityService.findByMember(memberId);
 
         //Then
         log.debug("======================");

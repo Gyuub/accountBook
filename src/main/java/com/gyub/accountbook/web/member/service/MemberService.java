@@ -1,13 +1,11 @@
 package com.gyub.accountbook.web.member.service;
 
-import com.gyub.accountbook.global.dto.member.LoginMemberDto;
-import com.gyub.accountbook.global.dto.member.TokenMemberDto;
+import com.gyub.accountbook.global.dto.member.MemberDto;
+import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.member.domain.Member;
+import com.gyub.accountbook.web.member.domain.MemberAuthority;
 import com.gyub.accountbook.web.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,31 +21,44 @@ public class MemberService{
     private final PasswordEncoder passwordEncoder;
 
     //==조회==//
+    @Transactional(readOnly = true)
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Member findOne(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseGet(() -> new Member() );
+                .orElse(null);
+    }
+    @Transactional(readOnly = true)
+    public MemberDto getMemberInfo() {
+        return MemberDto.from(
+                SecurityUtil.getCurrentUserEmail()
+                .flatMap(s -> memberRepository.findOneByEmail(s))
+                .orElse(null)
+        );
     }
 
     @Transactional
-    public void join(Member member) {
+    public MemberDto join(Member member) {
         //중복체크
         validateDuplicateMember(member);
 
-        //암호화
+        //권한설정
+        MemberAuthority authority = MemberAuthority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+        member.addAuthority(authority);
         member.changePassword(passwordEncoder.encode(member.getPassword()));
 
-        memberRepository.save(member);
+        return MemberDto.from(memberRepository.save(member));
     }
 
     @Transactional
     public void modify(Long id, String nickname, String password){
-        Member member = findOne(id);
+        Member member = memberRepository.findById(id).orElse(null);
         validateMatchePassword(password, member);
-
         member.update(nickname);
     }
 
@@ -59,8 +70,7 @@ public class MemberService{
     }
 
     private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByNickname(member.getNickname());
-        if (!findMembers.isEmpty()) {
+        if (memberRepository.findOneByEmail(member.getEmail()).orElse(null) != null) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }

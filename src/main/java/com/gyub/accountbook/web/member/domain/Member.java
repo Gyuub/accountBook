@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity @Getter
 @NoArgsConstructor
@@ -18,6 +15,8 @@ public class Member{
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
+
+    @Column(unique = true)
     private String email;
     private String nickname;
     private String password;
@@ -31,16 +30,15 @@ public class Member{
             joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")}
     )
-    private Set<MemberAuthority> authorities;
+    private Set<MemberAuthority> authorities = new HashSet<>();
 
     //==생성자메소드==//
     @Builder
-    public Member(Long id, String email, String nickname, String password, Set<MemberAuthority> authorities) {
+    public Member(Long id, String email, String nickname, String password) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        this.authorities = authorities;
     }
 
     //==비즈니스 로직==//
@@ -49,6 +47,9 @@ public class Member{
     }
     public void changePassword(String password){
         this.password = password;
+    }
+    public void addAuthority(MemberAuthority memberAuthority){
+        this.authorities.add(memberAuthority);
     }
 
 

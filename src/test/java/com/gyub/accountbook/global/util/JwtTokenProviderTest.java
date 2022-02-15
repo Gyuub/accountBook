@@ -10,7 +10,7 @@ public class JwtTokenProviderTest {
     @Test
     public void 테스트명(){
         //Given
-        Token.Request request = new Token.Request("test@kakao.com", "1234");
+        //Token.Request request = new Token.Request("test@kakao.com", "1234");
 
 
 

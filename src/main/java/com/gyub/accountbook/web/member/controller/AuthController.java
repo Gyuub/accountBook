@@ -2,8 +2,8 @@ package com.gyub.accountbook.web.member.controller;
 
 import com.gyub.accountbook.global.dto.member.LoginMemberDto;
 import com.gyub.accountbook.global.dto.member.TokenMemberDto;
-import com.gyub.accountbook.global.util.jwt.JwtFilter;
-import com.gyub.accountbook.global.util.jwt.TokenProvider;
+import com.gyub.accountbook.global.configuration.jwt.JwtFilter;
+import com.gyub.accountbook.global.configuration.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,9 +31,9 @@ public class AuthController {
                 = new UsernamePasswordAuthenticationToken(memberDto.getEmail(), memberDto.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = tokenProvider.createToken(authenticationToken);
+        String jwt = tokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

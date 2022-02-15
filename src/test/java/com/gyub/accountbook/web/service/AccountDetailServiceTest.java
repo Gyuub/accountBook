@@ -40,12 +40,11 @@ public class AccountDetailServiceTest {
     @Test
     public void 가계부_내역_저장() {
         //Given
-        Account account = accountService.findOne(3L);
+        Account account = accountService.findOne(1L);
 
 
         AccountDetail accountDetail = AccountDetail.builder()
-                //.account(account)
-                .account(Account.builder().id(3L).build())
+                .account(Account.builder().id(1L).build())
                 .title("가계부 내역 제목")
                 .contents("중국집가서 당면을 먹었다. like 중국당면")
                 .writer("테스터")

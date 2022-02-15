@@ -21,8 +21,10 @@ public class AuthorityQueryRepository {
     QAuthority authority = new QAuthority("authority");
     QAccount account = new QAccount("account");
 
+
     public List<Authority> findByMembers(Long memberId){
-        return jpaQueryFactory.select(authority)
+        return jpaQueryFactory
+                .select(authority)
                 .from(authority)
                 .innerJoin(authority.account, account).fetchJoin()
                 .where(
