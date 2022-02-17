@@ -1,17 +1,20 @@
 package com.gyub.accountbook.web.member.domain;
 
 
+import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity @Getter
 @NoArgsConstructor
-public class Member{
+@Where(clause = " delete_yn = 'N' ")
+public class Member extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;

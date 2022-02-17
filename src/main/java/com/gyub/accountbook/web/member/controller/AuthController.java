@@ -1,6 +1,6 @@
 package com.gyub.accountbook.web.member.controller;
 
-import com.gyub.accountbook.global.dto.member.LoginMemberDto;
+import com.gyub.accountbook.global.dto.member.LoginMemberAuthorityDto;
 import com.gyub.accountbook.global.dto.member.TokenMemberDto;
 import com.gyub.accountbook.global.configuration.jwt.JwtFilter;
 import com.gyub.accountbook.global.configuration.jwt.TokenProvider;
@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenMemberDto> authenticateMember(@RequestBody LoginMemberDto memberDto) {
+    public ResponseEntity<TokenMemberDto> authenticateMember(@RequestBody LoginMemberAuthorityDto memberDto) {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(memberDto.getEmail(), memberDto.getPassword());
 

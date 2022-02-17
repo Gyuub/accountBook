@@ -4,8 +4,11 @@ package com.gyub.accountbook.web.member.controller;
 import com.gyub.accountbook.global.dto.member.AddMemberDto;
 import com.gyub.accountbook.global.dto.member.MemberDto;
 import com.gyub.accountbook.global.dto.member.ModifyMemberDto;
+import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.service.MemberService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,30 +25,38 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/member")
+    public ResponseEntity<MemberDto> getMyUserInfo(HttpServletRequest request) {
+        String email = SecurityUtil.getCurrentUserEmail();
+        return ResponseEntity.ok()
+                .body(memberService.getMemberInfo(email));
+    }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> addMember(@RequestBody AddMemberDto memberDto){
+    public ResponseEntity<MemberJoinDto> addMember(@RequestBody AddMemberDto memberDto) {
         Member member = Member.builder()
                 .email(memberDto.getEmail())
                 .nickname(memberDto.getNickname())
                 .password(memberDto.getPassword())
                 .build();
-        memberService.join(member);
-        return ResponseEntity.ok("정상적으로 회원 가입이 되었습니다.");
-    }
-
-    @GetMapping("/member")
-    public ResponseEntity<MemberDto> getMyUserInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(memberService.getMemberInfo());
+        memberService.save(member);
+        return ResponseEntity.ok()
+                .body(new MemberJoinDto("정상적으로 회원 가입이 되었습니다."));
     }
 
     @PutMapping(value = "/member")
-    public void modifyMember(@RequestBody ModifyMemberDto memberDto){
-        memberService.modify(memberDto.getId(), memberDto.getNickname(), memberDto.getPassword());
+    public void modifyMember(@RequestBody ModifyMemberDto memberDto) {
+        memberService.update(memberDto.getId(), memberDto.getNickname(), memberDto.getPassword());
     }
 
     @DeleteMapping(value = "/member")
-    public void deleteMember(@PathVariable("id")Long memberId){
+    public void deleteMember(@PathVariable("id") Long memberId) {
 
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberJoinDto {
+        private String message;
     }
 }

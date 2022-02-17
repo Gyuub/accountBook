@@ -1,5 +1,7 @@
 package com.gyub.accountbook.global.util;
 
+import com.gyub.accountbook.global.exception.ErrorCode;
+import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -15,12 +17,12 @@ public class SecurityUtil {
     private SecurityUtil() {
     }
 
-    public static Optional<String> getCurrentUserEmail() {
+    public static String getCurrentUserEmail() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
             logger.debug("Security Context에 인증 정보가 없습니다.");
-            return Optional.empty();
+            throw new MemberNotFoundException("", ErrorCode.MEMBER_NOT_FOUND);
         }
 
         String email = null;
@@ -31,7 +33,8 @@ public class SecurityUtil {
             email = (String) authentication.getPrincipal();
         }
 
-        return Optional.ofNullable(email);
+        return Optional.of(email)
+                .orElseThrow(()->new MemberNotFoundException("", ErrorCode.MEMBER_NOT_FOUND));
     }
 
 }

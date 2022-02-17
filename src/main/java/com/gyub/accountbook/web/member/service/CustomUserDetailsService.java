@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
 
         return new User(
-                member.getEmail()
+                email
                 ,member.getPassword()
                 ,grantedAuthorities
         );
