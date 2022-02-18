@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 @Getter
 @AllArgsConstructor
-public class Result<T> {
+public class ResultListResponse<T> {
     private T data;
     private int count;
 }
