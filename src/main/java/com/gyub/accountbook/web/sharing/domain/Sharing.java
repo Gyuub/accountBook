@@ -3,6 +3,7 @@ package com.gyub.accountbook.web.sharing.domain;
 import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.member.domain.Member;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import javax.persistence.*;
 
 @Entity @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Sharing extends BaseEntity {
 
     @Id
@@ -18,40 +21,28 @@ public class Sharing extends BaseEntity {
     @Column(name = "sharing_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Member.class)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_member_id")
     private Member fromMember;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Member.class)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_member_id")
     private Member toMember;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
     @Enumerated(EnumType.STRING)
     private SharingState sharingState;
 
-    @Builder
-    public Sharing(Long id, Member fromMember, Member toMember, Account account, SharingState sharingState) {
-        this.id = id;
-        this.fromMember = fromMember;
-        this.toMember = toMember;
-        this.account = account;
-        this.sharingState = sharingState;
-    }
 
     //==비즈니스 로직==//
     public void delete(){
         this.deleteFlag = 'Y';
     }
 
-    public void reply(SharingState sharingState){
+    public void changeState(SharingState sharingState){
         this.sharingState = sharingState;
     }
-
-
-
-
 }
