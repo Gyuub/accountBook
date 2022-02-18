@@ -1,11 +1,10 @@
 package com.gyub.accountbook.web.account.domain;
 
 import com.gyub.accountbook.global.domain.BaseEntity;
-import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
-import com.gyub.accountbook.web.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor
+@Where(clause = "delete_yn = 'N'")
 public class Account extends BaseEntity {
 
     @Id

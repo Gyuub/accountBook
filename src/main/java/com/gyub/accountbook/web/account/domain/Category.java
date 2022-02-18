@@ -1,4 +1,4 @@
-package com.gyub.accountbook.web.account.domain.detail;
+package com.gyub.accountbook.web.account.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.gyub.accountbook.global.dto.account;
 
-import com.gyub.accountbook.web.account.domain.Category;
+import com.gyub.accountbook.web.account.domain.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
+@AllArgsConstructor
+public class AccountRequestDto {
     private Long id;
     private String name;
 
-    public static CategoryDto from(Category category){
-        return CategoryDto.builder()
-                .id(category.getId())
-                .name(category.getName())
+    public Account toEntity(){
+        return Account.builder()
+                .id(this.id)
+                .name(this.name)
                 .build();
     }
 }

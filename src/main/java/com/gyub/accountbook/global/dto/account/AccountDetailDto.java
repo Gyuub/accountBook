@@ -1,15 +1,10 @@
 package com.gyub.accountbook.global.dto.account;
 
-import com.gyub.accountbook.web.account.domain.Account;
-import com.gyub.accountbook.web.account.domain.detail.AccountDetail;
-import com.gyub.accountbook.web.account.domain.detail.Category;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.gyub.accountbook.web.account.domain.AccountDetail;
+import lombok.*;
 
-@Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDetailDto {
@@ -19,21 +14,16 @@ public class AccountDetailDto {
     private String title;
     private String contents;
     private Integer amount;
-    private String writer;
 
-    private Long accountId;
+    private CategoryDto category;
 
-    private Long categoryId;
-
-    public AccountDetail toEntity(){
-        return AccountDetail.builder()
-                .id(id)
-                .title(title)
-                .contents(contents)
-                .amount(amount)
-                .writer(writer)
-                .category(Category.builder().id(categoryId).build())
-                .account(Account.builder().id(accountId).build())
+    public static AccountDetailDto from(AccountDetail accountDetail){
+        return AccountDetailDto.builder()
+                .id(accountDetail.getId())
+                .title(accountDetail.getTitle())
+                .contents(accountDetail.getContents())
+                .amount(accountDetail.getAmount())
+                .category(CategoryDto.from(accountDetail.getCategory()))
                 .build();
     }
 

@@ -1,17 +1,21 @@
-package com.gyub.accountbook.web.account.domain.detail;
+package com.gyub.accountbook.web.account.domain;
 
-import com.gyub.accountbook.global.dto.account.AccountDetailDto;
-import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.global.domain.BaseEntity;
+import com.gyub.accountbook.web.member.domain.Member;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Where(clause = "delete_yn = 'N'")
 public class AccountDetail extends BaseEntity {
 
     @Id
@@ -22,34 +26,31 @@ public class AccountDetail extends BaseEntity {
     private String title;
     private String contents;
     private Integer amount;
-    private String writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = true)
     private Category category;
 
-    //==생성자 패턴==//
-    @Builder
-    public AccountDetail(Long id,String title, String contents, Integer amount,
-                         String writer, Account account, Category category) {
-        this.id = id;
-        this.title = title;
-        this.contents = contents;
-        this.amount = amount;
-        this.writer = writer;
-        this.account = account;
+    //==비즈니스 로직==//
+    public void addMember(Member member){
+        this.member = member;
+    }
+    public void addCatecory(Category category){
         this.category = category;
     }
-
-    //==비즈니스 로직==//
-    public void update(String title, String contents, Integer amount){
+    public void update(String title, String contents, Integer amount, Category category){
         this.title = title;
         this.contents = contents;
         this.amount = amount;
+        this.category = category;
     }
 
     public void delete(){
@@ -63,7 +64,6 @@ public class AccountDetail extends BaseEntity {
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", amount=" + amount +
-                ", writer='" + writer + '\'' +
                 '}';
     }
 }
