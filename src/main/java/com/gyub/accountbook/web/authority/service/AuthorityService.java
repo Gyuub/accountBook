@@ -1,6 +1,8 @@
 package com.gyub.accountbook.web.authority.service;
 
 import com.gyub.accountbook.global.dto.authority.AuthorityDto;
+import com.gyub.accountbook.global.exception.ErrorCode;
+import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
@@ -10,12 +12,15 @@ import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthorityService {
 
     private final MemberRepository memberRepository;
@@ -32,7 +37,8 @@ public class AuthorityService {
     }
 
     public List<AuthorityDto> getMyAccountAuthorities(String email){
-        Member member = memberRepository.findOneByEmail(email).orElse(null);
+        Member member = memberRepository.findOneByEmail(email)
+                .orElseThrow(() -> new MemberNotFoundException("email 계정 찾을 수 없음", ErrorCode.MEMBER_NOT_FOUND));
         Long memberId = member.getId();
         return authorityQueryRepository.findByMembers(memberId).stream()
                 .map(authority -> AuthorityDto.from(authority))
@@ -43,7 +49,9 @@ public class AuthorityService {
         return authorityQueryRepository.findByMemberAndRole(memberId, role);
     }
 
+    @Transactional
     public void save(Member member, Account account, Role role){
+
         Authority authority = new Authority(member, account , role);
         validateDuplicate(authority);
         authorityRepository.save(authority);
