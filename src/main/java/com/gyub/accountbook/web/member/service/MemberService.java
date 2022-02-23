@@ -1,11 +1,13 @@
 package com.gyub.accountbook.web.member.service;
 
 import com.gyub.accountbook.global.dto.member.MemberDto;
-import com.gyub.accountbook.global.exception.custom.EmailDuplicateException;
 import com.gyub.accountbook.global.exception.ErrorCode;
+import com.gyub.accountbook.global.exception.custom.EmailDuplicateException;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.domain.MemberAuthority;
+import com.gyub.accountbook.web.member.domain.MemberRole;
+import com.gyub.accountbook.web.member.repository.MemberAuthorityRepository;
 import com.gyub.accountbook.web.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberAuthorityRepository memberAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
 
     //==조회==//
@@ -28,7 +31,6 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     public Member findOne(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException("memberId : " + memberId, ErrorCode.MEMBER_NOT_FOUND));
@@ -47,12 +49,14 @@ public class MemberService {
         //중복체크
         validateDuplicateMember(member);
 
-        //권한설정
+        //권한저장
         MemberAuthority authority = MemberAuthority.builder()
-                .authorityName("ROLE_USER")
+                .memberRole(MemberRole.builder().authorityName("ROLE_USER").build())
                 .build();
-        member.addAuthority(authority);
+        memberAuthorityRepository.save(authority);
+
         member.changePassword(passwordEncoder.encode(member.getPassword()));
+        member.addAuthority(authority);
 
         return MemberDto.from(memberRepository.save(member));
     }

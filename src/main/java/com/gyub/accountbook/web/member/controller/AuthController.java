@@ -4,6 +4,8 @@ import com.gyub.accountbook.global.dto.member.LoginMemberAuthorityDto;
 import com.gyub.accountbook.global.dto.member.TokenMemberDto;
 import com.gyub.accountbook.global.configuration.jwt.JwtFilter;
 import com.gyub.accountbook.global.configuration.jwt.TokenProvider;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,7 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenMemberDto> authenticateMember(@RequestBody LoginMemberAuthorityDto memberDto) {
+    public ResponseEntity<AuthResponseDto> authenticateMember(@RequestBody LoginMemberAuthorityDto memberDto) {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(memberDto.getEmail(), memberDto.getPassword());
 
@@ -38,7 +40,16 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenMemberDto(jwt), httpHeaders, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .header(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt)
+                .body(new AuthResponseDto("로그인 되었습니다.",jwt));
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class AuthResponseDto {
+        private String message;
+        private String token;
     }
 
 

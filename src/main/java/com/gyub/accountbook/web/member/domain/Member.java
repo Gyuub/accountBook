@@ -24,15 +24,10 @@ public class Member extends BaseEntity {
     private String nickname;
     private String password;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<Authority> authoritys = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_authority",
-            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")}
-    )
+    @OneToMany( mappedBy = "member" )
     private Set<MemberAuthority> authorities = new HashSet<>();
 
     //==생성자메소드==//
@@ -52,6 +47,7 @@ public class Member extends BaseEntity {
         this.password = password;
     }
     public void addAuthority(MemberAuthority memberAuthority){
+        memberAuthority.addMember(this);
         this.authorities.add(memberAuthority);
     }
 
