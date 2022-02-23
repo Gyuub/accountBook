@@ -1,6 +1,5 @@
 package com.gyub.accountbook.web.account.repository;
 
-
 import com.gyub.accountbook.web.account.domain.AccountDetail;
 import com.gyub.accountbook.web.account.domain.QAccountDetail;
 import com.gyub.accountbook.web.account.domain.QCategory;
@@ -8,13 +7,14 @@ import com.gyub.accountbook.web.member.domain.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class AccountQueryRepository {
+public class AccountDetailQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public AccountQueryRepository(final JPAQueryFactory jpaQueryFactory) {
+    public AccountDetailQueryRepository(final JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
@@ -23,20 +23,15 @@ public class AccountQueryRepository {
     QCategory category = new QCategory("category");
     QMember member = new QMember("member");
 
-
-    //조회 : 가계부
-    public List<AccountDetail> findByAccounts(Long accountId){
+    List<AccountDetail> findAllByDateMonth(LocalDateTime from, LocalDateTime to){
         return jpaQueryFactory
                 .select(accountDetail)
                 .from(accountDetail)
-                .leftJoin(accountDetail.category, category).fetchJoin()
-                .leftJoin(accountDetail.member, member).fetchJoin()
+                .innerJoin(accountDetail.member, member).fetchJoin()
+                .innerJoin(accountDetail.category, category).fetchJoin()
                 .where(
-                        accountDetail.account.id.eq(accountId))
-                .fetch();
+                        accountDetail.writeDate.between(from, to)
+                ).fetch();
     }
-
-
-
 
 }

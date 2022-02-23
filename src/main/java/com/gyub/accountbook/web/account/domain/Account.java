@@ -21,8 +21,7 @@ public class Account extends BaseEntity {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(name = "account_name")
-    @NotNull
+    @Column(name = "account_name", nullable = false, length = 50)
     private String name;
 
     @OneToMany(mappedBy = "account")

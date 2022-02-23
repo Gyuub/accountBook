@@ -43,8 +43,10 @@ public class AccountDetailController {
 
     @PostMapping("/account/{accountid}")
     public ResponseEntity<AccountDetailDto> saveAccountDetail(
+            @PathVariable(value = "accountid") Long accountId,
             @RequestBody AccountDetailRequestDto accountDetailRequestDto
     ) {
+        accountDetailRequestDto.setAccountId(accountId);
         AccountDetail accountDetail = accountDetailRequestDto.toEntity();
 
         return ResponseEntity.ok()

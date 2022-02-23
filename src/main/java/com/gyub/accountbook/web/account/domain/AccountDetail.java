@@ -1,5 +1,6 @@
 package com.gyub.accountbook.web.account.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.member.domain.Member;
 import lombok.AllArgsConstructor;
@@ -7,8 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,6 +29,14 @@ public class AccountDetail extends BaseEntity {
     private String title;
     private String contents;
     private Integer amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "detail_cd", length = 10)
+    private AccountDetailRole detailCd;
+
+    @Column(name = "write_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime writeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

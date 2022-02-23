@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Entity
@@ -21,6 +18,7 @@ public class Category {
     @Column(name = "categoty_id")
     private Long id;
 
+    @Column(length = 20)
     private String name;
 
 }

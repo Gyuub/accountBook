@@ -44,7 +44,7 @@ public class AccountController {
     }
 
     @PutMapping("/account")
-    public ResponseEntity<AccountDto> modifyAccountDetail(
+    public ResponseEntity<AccountDto> modifyAccount(
             @RequestBody AccountRequestDto accountRequestDto
     ) {
         return ResponseEntity.ok()
