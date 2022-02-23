@@ -1,6 +1,9 @@
 package com.gyub.accountbook.global.configuration.interceptor;
 
 import com.gyub.accountbook.global.dto.authority.AuthorityDto;
+import com.gyub.accountbook.global.exception.ErrorCode;
+import com.gyub.accountbook.global.exception.custom.AccountUnauthorizedException;
+import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.authority.service.AuthorityService;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +31,21 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         logger.info("AuthorityInterceptor =========> 권한 확인");
 
         //==로그인정보조회==//
-        String email = SecurityUtil.getCurrentUserEmail()
-                .orElseThrow(() -> new RuntimeException("로그인 정보가 누락되었습니다. 다시 로그인 해 주시기 바랍니다."));
+        String email = SecurityUtil.getCurrentUserEmail();
 
         //==권한내 가계부 목록==//
         List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities(email);
 
         //==접근하려는 가계부==//
         Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long accountId = Long.parseLong((String)pathVariables.get("accountId"));
+        Long accountId = Long.parseLong((String)pathVariables.get("accountid"));
+
 
         myAccounts.stream()
-                .filter(dto -> dto.getId().equals(accountId))
+                .filter(dto -> dto.getAccount().getId().equals(accountId))
                 .findAny()
-                .orElseThrow(()-> new RuntimeException("가계부에 대한 접근을 할 수 없습니다."));
+                .orElseThrow(()-> new AccountUnauthorizedException("가계부에 대한 접근을 할 수 없습니다."
+                        , ErrorCode.ACCOUNT_UNAUTHORIZED));
 
         return true;
     }
