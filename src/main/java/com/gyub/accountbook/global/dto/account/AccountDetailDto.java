@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDetailDto extends BaseEntity {
+public class AccountDetailDto {
 
     private Long id;
 

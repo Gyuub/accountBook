@@ -40,6 +40,7 @@ public class AccountDetailRequestDto {
                 .account(Account.builder().id(accountId).build())
                 .category(Category.builder().id(categoryId).build())
                 .member(Member.builder().id(memberId).build())
+                .detailCd(detailCd)
                 .build();
     }
 }
