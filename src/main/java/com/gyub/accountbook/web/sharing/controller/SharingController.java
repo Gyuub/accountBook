@@ -31,7 +31,7 @@ public class SharingController {
     public ResponseEntity<ResultListResponse> getAllSahring() {
         List<SharingDto> sharings = sharingService.findByAll();
         return ResponseEntity.ok()
-                .body(new ResultListResponse(sharings, sharings.size()));
+                .body(new ResultListResponse(sharings, sharings.size(), ""));
     }
 
     //공유신청
