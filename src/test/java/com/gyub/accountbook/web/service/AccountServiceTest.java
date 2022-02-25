@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,22 +39,26 @@ public class AccountServiceTest {
                                 .build();
 
         //When
-        Long saveId = accountService.save(memberId, account);
+        AccountDto save = accountService.save(account);
 
         //Then
-        assertSame(account, accountService.findOne(saveId));
+        assertSame(account, accountService.findOne(save.getId()));
     }
 
     @Test
     @Rollback(value = false)
     public void 가계부_수정(){
         //Given
-        Long memberId = 2L;
         Long accountId = 3L;
         String name = "가계부 수정 테스트";
+        Account account = Account.builder()
+                .id(accountId)
+                .name("나만의 가계뿌")
+                .build();
+
 
         //When
-        accountService.update(memberId, accountId, name);
+        accountService.update(account);
 
         //Then
         assertEquals(name,accountService.findOne(accountId).getName());
@@ -65,7 +72,7 @@ public class AccountServiceTest {
         Long accountId = 3L;
 
         //When
-        accountService.delete(memberId, accountId);
+        accountService.delete(accountId);
 
         //Then
         assertEquals('Y', accountService.findOne(accountId).getDeleteFlag());
@@ -89,9 +96,14 @@ public class AccountServiceTest {
         log.debug("======================");
     }
 
+    @Test
     public void 가계부_목록_조건_조회(){
 
+
+        LocalDateTime to;
+
     }
+
 
 
 

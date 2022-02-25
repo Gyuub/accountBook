@@ -8,6 +8,7 @@ import com.gyub.accountbook.web.member.domain.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -35,6 +36,8 @@ public class AccountQueryRepository {
                         accountDetail.account.id.eq(accountId))
                 .fetch();
     }
+
+
 
 
 

@@ -1,11 +1,9 @@
 package com.gyub.accountbook.web;
 
 import com.gyub.accountbook.global.dto.member.AddMemberDto;
-import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.account.service.AccountService;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.service.MemberService;
-import com.gyub.accountbook.web.sharing.domain.Sharing;
 import com.gyub.accountbook.web.sharing.service.SharingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-public class MemberIetegrationTest {
+public class MemberIntegrationTest {
     @Autowired
     MemberService memberService;
     @Autowired
@@ -28,7 +26,7 @@ public class MemberIetegrationTest {
         Member member = memberDto.toEntity();
 
         //When
-        memberService.join(member);
+        memberService.save(member);
 
 
         //Then

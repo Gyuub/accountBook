@@ -57,11 +57,21 @@ public class AccountDetail extends BaseEntity {
     public void addCatecory(Category category){
         this.category = category;
     }
-    public void update(String title, String contents, Integer amount, Category category){
+    public void update(
+            String title
+            , String contents
+            , Integer amount
+            , Category category
+            , LocalDateTime writeDate
+            , AccountDetailRole accountDetailRole
+            ){
         this.title = title;
         this.contents = contents;
         this.amount = amount;
         this.category = category;
+        this.writeDate = writeDate;
+        this.detailCd = accountDetailRole;
+
     }
 
     public void delete(){

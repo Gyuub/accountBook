@@ -2,11 +2,11 @@ package com.gyub.accountbook.web.account.service;
 
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
-import com.gyub.accountbook.global.exception.custom.AccountUnauthorizedException;
 import com.gyub.accountbook.global.exception.custom.InvalidValueException;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.account.domain.AccountDetail;
+import com.gyub.accountbook.web.account.repository.AccountDetailQueryRepository;
 import com.gyub.accountbook.web.account.repository.AccountDetailRepository;
 import com.gyub.accountbook.web.account.repository.AccountQueryRepository;
 import com.gyub.accountbook.web.member.domain.Member;
@@ -15,19 +15,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AccountDetailService {
     private final AccountDetailRepository accountDetailRepository;
     private final AccountQueryRepository accountQueryRepository;
 
+    private final AccountDetailQueryRepository accountDetailQueryRepository;
+
     private final MemberRepository memberRepository;
 
     //내역 조회
-    @Transactional
     public AccountDetailDto findOne(Long accountDetailId) {
         return accountDetailRepository.findById(accountDetailId)
                 .map(accountDetail -> AccountDetailDto.from(accountDetail))
@@ -35,9 +42,14 @@ public class AccountDetailService {
                         , ErrorCode.INVALID_VALUE));
     }
 
-    @Transactional(readOnly = true)
-    public List<AccountDetailDto> findAccountDetails(Long accountId) {
-        return accountQueryRepository.findByAccounts(accountId)
+
+    public List<AccountDetailDto> findAllByDateMonth(Long accountId, LocalDate dateMonth) {
+
+        validateParameter(dateMonth);
+
+        LocalDateTime from = dateMonth.atTime(0, 0).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime to = dateMonth.atTime(0, 0).with(TemporalAdjusters.lastDayOfMonth());
+        return accountDetailQueryRepository.findAllByDateMonth(accountId, from, to)
                 .stream()
                 .map(accountDetail -> AccountDetailDto.from(accountDetail))
                 .collect(Collectors.toList());
@@ -71,6 +83,8 @@ public class AccountDetailService {
                 , accountDetail.getContents()
                 , accountDetail.getAmount()
                 , accountDetail.getCategory()
+                , accountDetail.getWriteDate()
+                , accountDetail.getDetailCd()
         );
         return AccountDetailDto.from(findDetail);
     }
@@ -86,6 +100,15 @@ public class AccountDetailService {
     }
 
 
+    private LocalDateTime convertLocalDate(String dateMonth){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDateTime.parse(dateMonth, formatter);
+    }
 
+    private void validateParameter(LocalDate param){
+        if(param == null){
+            throw new InvalidValueException("param :" + param, ErrorCode.INVALID_VALUE);
+        }
+    }
 
 }

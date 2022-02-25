@@ -10,6 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -81,4 +84,10 @@ public class TokenProvider {
         }
         return false;
     }
+
+//    private Key getSigningKey(String secretKey) {
+//        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+//        return Keys.hmacShaKeyFor(keyBytes);
+//    }
+
 }

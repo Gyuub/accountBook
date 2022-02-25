@@ -1,5 +1,6 @@
 package com.gyub.accountbook.web.sharing.service;
 
+import com.gyub.accountbook.global.dto.sharing.SharingDto;
 import com.gyub.accountbook.web.sharing.domain.Sharing;
 import com.gyub.accountbook.web.sharing.domain.SharingState;
 import org.junit.jupiter.api.Test;
@@ -27,11 +28,11 @@ public class SharingServiceTest {
         Long accountId = 3L;
 
         //When
-        Long sharingId = sharingService.invite(toMemberId, fromMemberId, accountId);
+        SharingDto save = sharingService.save(toMemberId, fromMemberId, accountId);
 
 
         //Then
-        assertEquals(SharingState.INVITE, sharingService.findOne(sharingId).getSharingState());
+        assertEquals(SharingState.INVITE, sharingService.findOne(save.getId()).getSharingState());
     }
 
     @Test

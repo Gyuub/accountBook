@@ -29,6 +29,16 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AuthorityService authorityService;
 
+    //가계부 조회
+    public Account findOne(Long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new InvalidValueException("accountId : " + accountId, ErrorCode.INVALID_VALUE));
+    }
+
+    public List<Account> findAccounts() {
+        return accountRepository.findAll();
+    }
+
 
     @Transactional
     public AccountDto save(Account account) {
@@ -81,15 +91,7 @@ public class AccountService {
         account.delete();
     }
 
-    //가계부 조회
-    public Account findOne(Long accountId) {
-        return accountRepository.findById(accountId)
-                .orElseThrow(() -> new InvalidValueException("accountId : " + accountId, ErrorCode.INVALID_VALUE));
-    }
 
-    public List<Account> findAccounts() {
-        return accountRepository.findAll();
-    }
 
     public void validateAccountUnauthorized(Long memberId, Long accountId){
         if (!authorityService.isAuthorityOwner(memberId, accountId)) {

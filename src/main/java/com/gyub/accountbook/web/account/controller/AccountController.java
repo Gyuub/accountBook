@@ -2,6 +2,7 @@ package com.gyub.accountbook.web.account.controller;
 
 
 import com.gyub.accountbook.global.dto.ResultListResponse;
+import com.gyub.accountbook.global.dto.ResultResponse;
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
 import com.gyub.accountbook.global.dto.account.AccountDetailRequestDto;
 import com.gyub.accountbook.global.dto.account.AccountDto;
@@ -33,30 +34,31 @@ public class AccountController {
     ) {
 
     }
-
-
     @PostMapping("/account")
-    public ResponseEntity<AccountDto> saveAccount(
+    public ResponseEntity<ResultResponse> saveAccount(
             @RequestBody AccountRequestDto accountRequestDto
     ) {
         return ResponseEntity.ok()
-                .body(accountService.save(accountRequestDto.toEntity()));
+                .body(new ResultResponse(accountService.save(accountRequestDto.toEntity())
+                        ,"새로운 가계부가 탄생했습니다. "));
     }
 
     @PutMapping("/account")
-    public ResponseEntity<AccountDto> modifyAccount(
+    public ResponseEntity<ResultResponse> modifyAccount(
             @RequestBody AccountRequestDto accountRequestDto
     ) {
         return ResponseEntity.ok()
-                .body(accountService.update(accountRequestDto.toEntity()));
+                .body(new ResultResponse(accountService.update(accountRequestDto.toEntity())
+                        ,"가계부가 수정 되었습니다. "));
+
     }
 
     @DeleteMapping("/account")
-    public ResponseEntity<AccountResponseDto> deleteAccountDetail(
+    public ResponseEntity<ResultResponse> deleteAccountDetail(
     ) {
         //accountDetailService.delete(detailId);
         return ResponseEntity.ok()
-                .body(new AccountResponseDto("정상적으로 삭제 되었습니다."));
+                .body(new ResultResponse("","ㅠㅠ.. 가계부가 삭제 되었습니다. "));
     }
 
     @Data

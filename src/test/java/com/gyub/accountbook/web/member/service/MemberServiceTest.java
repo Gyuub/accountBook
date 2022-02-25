@@ -2,7 +2,6 @@ package com.gyub.accountbook.web.member.service;
 
 import com.gyub.accountbook.global.dto.member.ModifyMemberDto;
 import com.gyub.accountbook.web.member.domain.Member;
-import com.gyub.accountbook.web.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +29,7 @@ public class MemberServiceTest {
                 .build();
 
         //When
-        memberService.join(member);
+        memberService.save(member);
 
         Member member2 = Member.builder()
                 .email("test@naver.com")
@@ -39,7 +38,7 @@ public class MemberServiceTest {
                 .build();
 
         //When
-        memberService.join(member2);
+        memberService.save(member2);
 
 
         //Then
@@ -62,8 +61,8 @@ public class MemberServiceTest {
                     .build();
 
             //When
-            memberService.join(member1);
-            memberService.join(member2); //예외가 발생해야 한다
+            memberService.save(member1);
+            memberService.save(member2); //예외가 발생해야 한다
 
             //Then
             fail("에외가 발생해야 한다.");
@@ -80,7 +79,7 @@ public class MemberServiceTest {
         dto.setPassword("1234");
 
         //When
-        memberService.modify(dto.getId(), dto.getNickname(), dto.getPassword());
+        memberService.update(dto.getId(), dto.getNickname(), dto.getPassword());
 
         Member findMember = memberService.findOne(dto.getId());
 

@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -23,15 +24,20 @@ public class AccountDetailQueryRepository {
     QCategory category = new QCategory("category");
     QMember member = new QMember("member");
 
-    List<AccountDetail> findAllByDateMonth(LocalDateTime from, LocalDateTime to){
+    //조회: 월별 내역
+    public List<AccountDetail> findAllByDateMonth(Long accountId, LocalDateTime from, LocalDateTime to){
         return jpaQueryFactory
                 .select(accountDetail)
                 .from(accountDetail)
                 .innerJoin(accountDetail.member, member).fetchJoin()
                 .innerJoin(accountDetail.category, category).fetchJoin()
                 .where(
+                        accountDetail.account.id.eq(accountId),
                         accountDetail.writeDate.between(from, to)
-                ).fetch();
+                ).orderBy(accountDetail.writeDate.desc())
+                .fetch();
     }
+
+
 
 }
