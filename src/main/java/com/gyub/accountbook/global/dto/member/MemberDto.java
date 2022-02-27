@@ -21,7 +21,6 @@ public class MemberDto {
     private String email;
     private String nickname;
 
-    private Set<MemberAuthorityDto> authorities = new HashSet<>();
 
     public static MemberDto from(Member member){
         if(member == null) return null;
@@ -30,10 +29,7 @@ public class MemberDto {
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .authorities(
-                        member.getAuthorities().stream()
-                                .map(memberAuthority -> MemberAuthorityDto.from(memberAuthority))
-                                .collect(Collectors.toSet()))
+
                 .build();
     }
 }
