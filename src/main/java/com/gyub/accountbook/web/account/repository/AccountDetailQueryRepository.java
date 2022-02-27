@@ -34,7 +34,11 @@ public class AccountDetailQueryRepository {
                 .where(
                         accountDetail.account.id.eq(accountId),
                         accountDetail.writeDate.between(from, to)
-                ).orderBy(accountDetail.writeDate.desc())
+                )
+                .orderBy(
+                        accountDetail.writeDate.desc(),
+                        accountDetail.createDate.desc()
+                )
                 .fetch();
     }
 
