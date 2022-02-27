@@ -1,9 +1,8 @@
 package com.gyub.accountbook.web.account.repository;
 
 
-import com.gyub.accountbook.web.account.domain.AccountDetail;
-import com.gyub.accountbook.web.account.domain.QAccountDetail;
-import com.gyub.accountbook.web.account.domain.QCategory;
+import com.gyub.accountbook.web.account.domain.*;
+import com.gyub.accountbook.web.authority.domain.QAuthority;
 import com.gyub.accountbook.web.member.domain.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -20,20 +19,28 @@ public class AccountQueryRepository {
     }
 
 
-    QAccountDetail accountDetail = new QAccountDetail("accountDetail");
-    QCategory category = new QCategory("category");
+    QAccount account = new QAccount("account");
+    QAuthority authority = new QAuthority("authority");
     QMember member = new QMember("member");
 
 
     //조회 : 가계부
-    public List<AccountDetail> findByAccounts(Long accountId){
+    public List<Account> findAccountAuthorityByCreateId(String email){
+//        return jpaQueryFactory
+//                .select(account)
+//                .from(account)
+//                .where(
+//                        account.createId.eq(email)
+//                )
+//                .fetch();
         return jpaQueryFactory
-                .select(accountDetail)
-                .from(accountDetail)
-                .leftJoin(accountDetail.category, category).fetchJoin()
-                .leftJoin(accountDetail.member, member).fetchJoin()
+                .select(account)
+                .from(account)
+                .innerJoin(account.accountAuthorities, authority).fetchJoin()
+                .innerJoin(authority.member, member).fetchJoin()
                 .where(
-                        accountDetail.account.id.eq(accountId))
+                        account.createId.eq(email)
+                )
                 .fetch();
     }
 

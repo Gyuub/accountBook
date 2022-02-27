@@ -1,6 +1,7 @@
 package com.gyub.accountbook.web.account.domain;
 
 import com.gyub.accountbook.global.domain.BaseEntity;
+import com.gyub.accountbook.web.authority.domain.Authority;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +28,20 @@ public class Account extends BaseEntity {
     @OneToMany(mappedBy = "account")
     private List<AccountDetail> accountDetails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account")
+    private List<Authority> accountAuthorities = new ArrayList<>();
+
 
     @Builder
     public Account(Long id, String name) {
         this.id = id;
         this.name = name;
     }
-
+    //==편의메소드==//
+    public void addAuthority(Authority authority){
+        this.accountAuthorities.add(authority);
+        authority.addAccount(this);
+    }
     //==비즈니스 로직==//
     public void delete(){
         this.deleteFlag = 'Y';

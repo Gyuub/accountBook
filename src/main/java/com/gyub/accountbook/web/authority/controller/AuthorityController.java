@@ -27,7 +27,7 @@ public class AuthorityController {
         List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities(email);
 
         return ResponseEntity.ok()
-                .body(new ResultListResponse(myAccounts, myAccounts.size()));
+                .body(new ResultListResponse(myAccounts, myAccounts.size(), ""));
     }
 
 }

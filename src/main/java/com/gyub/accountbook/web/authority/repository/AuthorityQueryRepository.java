@@ -28,7 +28,9 @@ public class AuthorityQueryRepository {
                 .from(authority)
                 .innerJoin(authority.account, account).fetchJoin()
                 .where(
-                        authority.member.id.eq(memberId))
+                        authority.member.id.eq(memberId),
+                        account.deleteFlag.eq('N')
+                )
                 .fetch();
     }
 

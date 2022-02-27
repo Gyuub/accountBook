@@ -52,7 +52,10 @@ public class AuthorityService {
     @Transactional
     public void save(Member member, Account account, Role role){
 
-        Authority authority = new Authority(member, account , role);
+        Authority authority = Authority.builder()
+                .member(member)
+                .account(account)
+                .role(role).build();
         validateDuplicate(authority);
         authorityRepository.save(authority);
     }

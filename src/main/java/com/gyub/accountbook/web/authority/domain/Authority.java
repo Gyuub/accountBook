@@ -1,12 +1,20 @@
 package com.gyub.accountbook.web.authority.domain;
 
+import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Entity @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Authority {
     @Id @GeneratedValue
     @Column(name = "authority_id")
@@ -24,29 +32,10 @@ public class Authority {
     @Column(length = 10)
     private Role role;
 
-
-    //==생성자 메소드==//
-    public Authority(Member member, Account account, Role role) {
-        this.member = member;
+    //==편의 메소드==//
+    public void addAccount(Account account){
         this.account = account;
-        this.role = role;
+        account.addAuthority(this);
     }
 
-    public Authority() {
-    }
-
-    //==비즈니스 로직==//
-
-
-
-
-    @Override
-    public String toString() {
-        return "Authority{" +
-                "id=" + id +
-                ", member=" + member +
-                ", account=" + account +
-                ", role=" + role +
-                '}';
-    }
 }

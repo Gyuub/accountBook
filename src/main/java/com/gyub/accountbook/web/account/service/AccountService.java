@@ -1,5 +1,6 @@
 package com.gyub.accountbook.web.account.service;
 
+import com.gyub.accountbook.global.dto.account.AccountAuthorityDto;
 import com.gyub.accountbook.global.dto.account.AccountDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.AccountUnauthorizedException;
@@ -7,6 +8,7 @@ import com.gyub.accountbook.global.exception.custom.InvalidValueException;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
 import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.account.repository.AccountQueryRepository;
 import com.gyub.accountbook.web.account.repository.AccountRepository;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ import java.util.List;
 public class AccountService {
     private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
+    private final AccountQueryRepository accountQueryRepository;
     private final AuthorityService authorityService;
 
     //가계부 조회
@@ -35,8 +39,18 @@ public class AccountService {
                 .orElseThrow(() -> new InvalidValueException("accountId : " + accountId, ErrorCode.INVALID_VALUE));
     }
 
-    public List<Account> findAccounts() {
-        return accountRepository.findAll();
+    public List<AccountAuthorityDto> findAccountAuthorityByEmail() {
+        //사용자 조회
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        return accountRepository.findByCreateId(email)
+                .stream()
+                .map(account -> AccountAuthorityDto.from(account))
+                .collect(Collectors.toList());
+//        return accountQueryRepository.findAccountAuthorityByCreateId(email)
+//                .stream()
+//                .map(account -> AccountAuthorityDto.from(account))
+//                .collect(Collectors.toList());
     }
 
 

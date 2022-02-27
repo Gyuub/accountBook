@@ -2,6 +2,7 @@ package com.gyub.accountbook.global.dto.account;
 
 
 import com.gyub.accountbook.global.dto.authority.AuthorityDto;
+import com.gyub.accountbook.global.dto.authority.AuthorityMemberDto;
 import com.gyub.accountbook.web.account.domain.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,15 +17,21 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountDto {
+public class AccountAuthorityDto {
 
     private Long id;
     private String name;
+    private List<AuthorityMemberDto> authoritys = new ArrayList<>();
 
-    public static AccountDto from(Account account) {
-        return AccountDto.builder()
+    public static AccountAuthorityDto from(Account account) {
+        return AccountAuthorityDto.builder()
                 .id(account.getId())
                 .name(account.getName())
+                .authoritys(
+                        account.getAccountAuthorities().stream()
+                                .map(authority -> AuthorityMemberDto.from(authority))
+                                .collect(Collectors.toList())
+                )
                 .build();
     }
 }

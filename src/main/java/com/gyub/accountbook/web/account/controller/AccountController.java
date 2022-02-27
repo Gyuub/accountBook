@@ -3,10 +3,7 @@ package com.gyub.accountbook.web.account.controller;
 
 import com.gyub.accountbook.global.dto.ResultListResponse;
 import com.gyub.accountbook.global.dto.ResultResponse;
-import com.gyub.accountbook.global.dto.account.AccountDetailDto;
-import com.gyub.accountbook.global.dto.account.AccountDetailRequestDto;
-import com.gyub.accountbook.global.dto.account.AccountDto;
-import com.gyub.accountbook.global.dto.account.AccountRequestDto;
+import com.gyub.accountbook.global.dto.account.*;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.account.domain.AccountDetail;
 import com.gyub.accountbook.web.account.service.AccountDetailService;
@@ -25,14 +22,13 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
-    private final AccountDetailService accountDetailService;
 
     @GetMapping("/account")
-    public void findAccountDetailById(
-            @PathVariable(value = "accountId") Long accountId,
-            @PathVariable(value = "detailId") Long detailId
+    public ResponseEntity<ResultListResponse> findAccountAuthorityByEmail(
     ) {
-
+        List<AccountAuthorityDto> result = accountService.findAccountAuthorityByEmail();
+        return ResponseEntity.ok()
+                .body(new ResultListResponse(result, result.size(), ""));
     }
     @PostMapping("/account")
     public ResponseEntity<ResultResponse> saveAccount(
