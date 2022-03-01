@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AccountDetailService {
     private final AccountDetailRepository accountDetailRepository;
-    private final AccountQueryRepository accountQueryRepository;
 
     private final AccountDetailQueryRepository accountDetailQueryRepository;
 

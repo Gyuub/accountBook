@@ -46,7 +46,7 @@ public class AccountDetail extends BaseEntity {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToOne( fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = true)
     private Category category;
 

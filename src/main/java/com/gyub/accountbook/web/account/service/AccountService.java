@@ -47,10 +47,7 @@ public class AccountService {
                 .stream()
                 .map(account -> AccountAuthorityDto.from(account))
                 .collect(Collectors.toList());
-//        return accountQueryRepository.findAccountAuthorityByCreateId(email)
-//                .stream()
-//                .map(account -> AccountAuthorityDto.from(account))
-//                .collect(Collectors.toList());
+
     }
 
 
