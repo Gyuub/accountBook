@@ -5,6 +5,7 @@ import com.gyub.accountbook.web.account.domain.QAccount;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.QAuthority;
 import com.gyub.accountbook.web.authority.domain.Role;
+import com.gyub.accountbook.web.member.domain.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -18,18 +19,22 @@ public class AuthorityQueryRepository {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    QAuthority authority = new QAuthority("authority");
-    QAccount account = new QAccount("account");
+    QMember member = QMember.member;
+    QAuthority authority = QAuthority.authority;
+    QAccount account = QAccount.account;
 
 
-    public List<Authority> findByMembers(Long memberId){
+    public List<Authority> findByMembers(String email){
         return jpaQueryFactory
                 .select(authority)
                 .from(authority)
                 .innerJoin(authority.account, account).fetchJoin()
+                .innerJoin(authority.member, member).fetchJoin()
                 .where(
-                        authority.member.id.eq(memberId),
-                        account.deleteFlag.eq('N')
+                        account.deleteFlag.eq('N'),
+                        member.deleteFlag.eq('N'),
+                        member.email.eq(email)
+
                 )
                 .fetch();
     }

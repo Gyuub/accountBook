@@ -23,8 +23,7 @@ public class AuthorityController {
     //가계부 권한 조회
     @GetMapping("/authority")
     public ResponseEntity<ResultListResponse> getMyAccountAuthority(){
-        String email = SecurityUtil.getCurrentUserEmail();
-        List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities(email);
+        List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities();
 
         return ResponseEntity.ok()
                 .body(new ResultListResponse(myAccounts, myAccounts.size(), ""));

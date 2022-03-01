@@ -3,6 +3,7 @@ package com.gyub.accountbook.web.authority.service;
 import com.gyub.accountbook.global.dto.authority.AuthorityDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
+import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
@@ -32,15 +33,11 @@ public class AuthorityService {
                 .orElse(null);
     }
 
-    public List<Authority> findByMember(Long memberId){
-        return authorityQueryRepository.findByMembers(memberId);
-    }
+    public List<AuthorityDto> getMyAccountAuthorities(){
+        String email = SecurityUtil.getCurrentUserEmail();
+        List<Authority> byMembers = authorityQueryRepository.findByMembers(email);
 
-    public List<AuthorityDto> getMyAccountAuthorities(String email){
-        Member member = memberRepository.findOneByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException("email 계정 찾을 수 없음", ErrorCode.MEMBER_NOT_FOUND));
-        Long memberId = member.getId();
-        return authorityQueryRepository.findByMembers(memberId).stream()
+        return authorityQueryRepository.findByMembers(email).stream()
                 .map(authority -> AuthorityDto.from(authority))
                 .collect(Collectors.toList());
     }

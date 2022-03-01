@@ -34,7 +34,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         String email = SecurityUtil.getCurrentUserEmail();
 
         //==권한내 가계부 목록==//
-        List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities(email);
+        List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities();
 
         //==접근하려는 가계부==//
         Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
