@@ -1,6 +1,6 @@
 package com.gyub.accountbook.web.account.service;
 
-import com.gyub.accountbook.global.dto.account.AccountAuthorityDto;
+import com.gyub.accountbook.global.dto.account.AccountSharingDto;
 import com.gyub.accountbook.global.dto.account.AccountDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.AccountUnauthorizedException;
@@ -10,13 +10,10 @@ import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.account.domain.Account;
 import com.gyub.accountbook.web.account.repository.AccountQueryRepository;
 import com.gyub.accountbook.web.account.repository.AccountRepository;
-import com.gyub.accountbook.web.authority.domain.Authority;
 import com.gyub.accountbook.web.authority.domain.Role;
-import com.gyub.accountbook.web.authority.repository.AuthorityRepository;
 import com.gyub.accountbook.web.authority.service.AuthorityService;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.repository.MemberRepository;
-import com.gyub.accountbook.web.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,17 +36,19 @@ public class AccountService {
                 .orElseThrow(() -> new InvalidValueException("accountId : " + accountId, ErrorCode.INVALID_VALUE));
     }
 
-    public List<AccountAuthorityDto> findAccountAuthorityByEmail() {
+    public List<AccountSharingDto> findAccountAuthorityByEmail() {
         //사용자 조회
         String email = SecurityUtil.getCurrentUserEmail();
 
-        return accountRepository.findByCreateId(email)
+        return accountRepository.findSharingByCreateId(email)
                 .stream()
-                .map(account -> AccountAuthorityDto.from(account))
+                .map(account -> AccountSharingDto.from(account))
                 .collect(Collectors.toList());
-
+//        return accountRepository.findByCreateId(email)
+//                .stream()
+//                .map(account -> AccountAuthorityDto.from(account))
+//                .collect(Collectors.toList());
     }
-
 
     @Transactional
     public AccountDto save(Account account) {

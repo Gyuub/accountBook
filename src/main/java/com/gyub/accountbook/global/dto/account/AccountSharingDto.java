@@ -1,8 +1,7 @@
 package com.gyub.accountbook.global.dto.account;
 
 
-import com.gyub.accountbook.global.dto.authority.AuthorityDto;
-import com.gyub.accountbook.global.dto.authority.AuthorityMemberDto;
+import com.gyub.accountbook.global.dto.sharing.SharingAccountDto;
 import com.gyub.accountbook.web.account.domain.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,19 +16,19 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountAuthorityDto {
+public class AccountSharingDto {
 
     private Long id;
     private String name;
-    private List<AuthorityMemberDto> authoritys = new ArrayList<>();
+    private List<SharingAccountDto> sharingAccount = new ArrayList<>();
 
-    public static AccountAuthorityDto from(Account account) {
-        return AccountAuthorityDto.builder()
+    public static AccountSharingDto from(Account account) {
+        return AccountSharingDto.builder()
                 .id(account.getId())
                 .name(account.getName())
-                .authoritys(
-                        account.getAccountAuthorities().stream()
-                                .map(authority -> AuthorityMemberDto.from(authority))
+                .sharingAccount(
+                        account.getAccountSharings().stream()
+                                .map(sharing -> SharingAccountDto.from(sharing))
                                 .collect(Collectors.toList())
                 )
                 .build();

@@ -85,15 +85,15 @@ public class AccountServiceTest {
     @Test
     public void 가계부_목록_조회(){
         //Given
-        Long memberId = 1L;
-
-        //When
-        List<Authority> authorities = authorityService.findByMember(memberId);
-
-        //Then
-        log.debug("======================");
-        authorities.stream().forEach(authority -> log.debug(authority.getAccount().getName()));
-        log.debug("======================");
+//        Long memberId = 1L;
+//
+//        //When
+//        List<Authority> authorities = authorityService.findByMember(memberId);
+//
+//        //Then
+//        log.debug("======================");
+//        authorities.stream().forEach(authority -> log.debug(authority.getAccount().getName()));
+//        log.debug("======================");
     }
 
     @Test

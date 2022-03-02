@@ -4,10 +4,9 @@ package com.gyub.accountbook.web.account.controller;
 import com.gyub.accountbook.global.dto.ResultListResponse;
 import com.gyub.accountbook.global.dto.ResultResponse;
 import com.gyub.accountbook.global.dto.account.*;
-import com.gyub.accountbook.web.account.domain.Account;
-import com.gyub.accountbook.web.account.domain.AccountDetail;
-import com.gyub.accountbook.web.account.service.AccountDetailService;
+import com.gyub.accountbook.global.dto.sharing.SharingAccountDto;
 import com.gyub.accountbook.web.account.service.AccountService;
+import com.gyub.accountbook.web.sharing.service.SharingService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +21,19 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+    private final SharingService sharingService;
 
     @GetMapping("/account")
-    public ResponseEntity<ResultListResponse> findAccountAuthorityByEmail(
+    public ResponseEntity<AccountResponseDto> findAccountAuthorityByEmail(
     ) {
-        List<AccountAuthorityDto> result = accountService.findAccountAuthorityByEmail();
+        List<AccountSharingDto> result = accountService.findAccountAuthorityByEmail();
+        List<SharingAccountDto> sharings = sharingService.findMemberAccountByEmail();
+
         return ResponseEntity.ok()
-                .body(new ResultListResponse(result, result.size(), ""));
+                .body(new AccountResponseDto(
+                        new ResultListResponse(result, result.size(), ""),
+                        new ResultListResponse(sharings, sharings.size(), "")
+                ));
     }
     @PostMapping("/account")
     public ResponseEntity<ResultResponse> saveAccount(
@@ -60,6 +65,8 @@ public class AccountController {
     @Data
     @AllArgsConstructor
     static class AccountResponseDto {
-        private String message;
+        private ResultListResponse account;
+        private ResultListResponse sharing;
+
     }
 }

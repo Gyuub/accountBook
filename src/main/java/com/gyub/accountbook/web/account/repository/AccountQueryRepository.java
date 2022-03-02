@@ -4,6 +4,9 @@ package com.gyub.accountbook.web.account.repository;
 import com.gyub.accountbook.web.account.domain.*;
 import com.gyub.accountbook.web.authority.domain.QAuthority;
 import com.gyub.accountbook.web.member.domain.QMember;
+import com.gyub.accountbook.web.sharing.domain.QSharing;
+import com.gyub.accountbook.web.sharing.domain.Sharing;
+import com.gyub.accountbook.web.sharing.domain.SharingState;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -22,17 +25,11 @@ public class AccountQueryRepository {
     QAccount account = new QAccount("account");
     QAuthority authority = new QAuthority("authority");
     QMember member = new QMember("member");
+    QSharing sharing = new QSharing("sharing");
 
 
     //조회 : 가계부
     public List<Account> findAccountAuthorityByCreateId(String email){
-//        return jpaQueryFactory
-//                .select(account)
-//                .from(account)
-//                .where(
-//                        account.createId.eq(email)
-//                )
-//                .fetch();
         return jpaQueryFactory
                 .select(account)
                 .from(account)
@@ -43,10 +40,4 @@ public class AccountQueryRepository {
                 )
                 .fetch();
     }
-
-
-
-
-
-
 }

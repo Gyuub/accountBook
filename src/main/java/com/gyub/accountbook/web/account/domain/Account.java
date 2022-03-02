@@ -2,6 +2,7 @@ package com.gyub.accountbook.web.account.domain;
 
 import com.gyub.accountbook.global.domain.BaseEntity;
 import com.gyub.accountbook.web.authority.domain.Authority;
+import com.gyub.accountbook.web.sharing.domain.Sharing;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,9 @@ public class Account extends BaseEntity {
     @OneToMany(mappedBy = "account")
     private List<Authority> accountAuthorities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account")
+    private List<Sharing> accountSharings = new ArrayList<>();
+
 
     @Builder
     public Account(Long id, String name) {
@@ -42,6 +46,7 @@ public class Account extends BaseEntity {
         this.accountAuthorities.add(authority);
         authority.addAccount(this);
     }
+
     //==비즈니스 로직==//
     public void delete(){
         this.deleteFlag = 'Y';

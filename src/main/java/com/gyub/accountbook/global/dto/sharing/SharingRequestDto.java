@@ -15,18 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SharingRequestDto {
     private Long id;
-    private Long fromMemberId;
-    private Long toMemberId;
+    private String fromMemberEmail;
+    private String toMemberEmail;
     private Long accountId;
     private SharingState sharingState;
 
-    public Sharing toEntity(){
-        return Sharing.builder()
-                .id(this.id)
-                .fromMember(Member.builder().id(this.fromMemberId).build())
-                .toMember(Member.builder().id(this.toMemberId).build())
-                .account(Account.builder().id(accountId).build())
-                .sharingState(this.sharingState)
-                .build();
-    }
+
 }

@@ -13,4 +13,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
    @EntityGraph(attributePaths = {"accountAuthorities", "accountAuthorities.member"} )
    List<Account> findByCreateId(String createId);
+
+   @EntityGraph(attributePaths = {"accountSharings", "accountSharings.toMember"} )
+   List<Account> findSharingByCreateId(String createId);
 }
