@@ -1,6 +1,7 @@
 package com.gyub.accountbook.web.sharing.service;
 
 import com.gyub.accountbook.global.dto.member.MemberDto;
+import com.gyub.accountbook.global.dto.sharing.SharingAccountDto;
 import com.gyub.accountbook.global.dto.sharing.SharingDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.InvalidValueException;
@@ -10,6 +11,7 @@ import com.gyub.accountbook.web.account.service.AccountService;
 import com.gyub.accountbook.web.authority.domain.Role;
 import com.gyub.accountbook.web.authority.service.AuthorityService;
 import com.gyub.accountbook.web.member.domain.Member;
+import com.gyub.accountbook.web.member.repository.MemberRepository;
 import com.gyub.accountbook.web.member.service.MemberService;
 import com.gyub.accountbook.web.sharing.domain.Sharing;
 import com.gyub.accountbook.web.sharing.domain.SharingState;
@@ -22,49 +24,80 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SharingService {
     private static final Logger logger = LoggerFactory.getLogger(SharingService.class);
 
+    private final MemberRepository memberRepository;
     private final SharingRepository sharingRepository;
     private final SharingQueryRepository sharingQueryRepository;
 
-    private final MemberService memberService;
-    private final AccountService accountService;
     private final AuthorityService authorityService;
 
-    @Transactional(readOnly = true)
+
     public Sharing findOne(Long sharingId) {
         return sharingRepository.findById(sharingId)
                 .orElseGet(() -> new Sharing());
     }
 
-    @Transactional(readOnly = true)
     public List<SharingDto> findByAll() {
         String email = SecurityUtil.getCurrentUserEmail();
-        MemberDto memberInfo = memberService.getMemberInfo(email);
-        return sharingQueryRepository.findAllByMemberId(memberInfo.getId())
+        Member member = memberRepository.findOneByEmail(email)
+                .orElseThrow(() -> new InvalidValueException("", ErrorCode.MEMBER_NOT_FOUND));
+        return sharingQueryRepository.findAllByMemberId(member.getId())
                 .stream()
                 .map(sharing -> SharingDto.from(sharing))
                 .collect(Collectors.toList());
     }
 
+    public List<SharingAccountDto> findMemberAccountByEmail(){
+        String email = SecurityUtil.getCurrentUserEmail();
+        return sharingQueryRepository.findMemberAccountByEmail(email)
+                .stream()
+                .map(sharing -> SharingAccountDto.from(sharing))
+                .collect(Collectors.toList());
+    }
+
     //공유 신청
     @Transactional
-    public SharingDto save(Long fromMemberId, Long toMemberId, Long accountId) {
+    public SharingDto save(String toMemberEmail, Long accountId) {
+        //유저 정보 조회
+        String fromMemberEmail = SecurityUtil.getCurrentUserEmail();
+
+        Member fromMember = memberRepository.findOneByEmail(fromMemberEmail)
+                .orElseThrow(() -> new InvalidValueException("", ErrorCode.MEMBER_NOT_FOUND));
+
+        Member toMember = memberRepository.findOneByEmail(toMemberEmail)
+                .orElseThrow(() -> new InvalidValueException("", ErrorCode.MEMBER_NOT_FOUND));
+
+        //공유정보
         Sharing sharing = Sharing.builder()
-                .toMember(Member.builder().id(toMemberId).build())
-                .fromMember(Member.builder().id(fromMemberId).build())
+                .fromMember(fromMember)
+                .toMember(toMember)
                 .account(Account.builder().id(accountId).build())
                 .sharingState(SharingState.INVITE)
                 .build();
+
         return SharingDto.from(
                 sharingRepository.save(sharing)
         );
     }
+//    public SharingDto save(Long fromMemberId, Long toMemberId, Long accountId) {
+//        Sharing sharing = Sharing.builder()
+//                .toMember(Member.builder().id(toMemberId).build())
+//                .fromMember(Member.builder().id(fromMemberId).build())
+//                .account(Account.builder().id(accountId).build())
+//                .sharingState(SharingState.INVITE)
+//                .build();
+//        return SharingDto.from(
+//                sharingRepository.save(sharing)
+//        );
+//    }
 
     //공유 결과 응답
     @Transactional
