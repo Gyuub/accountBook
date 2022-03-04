@@ -1,7 +1,9 @@
 package com.gyub.accountbook.web.member.controller;
 
 
+import com.gyub.accountbook.global.dto.ResultListResponse;
 import com.gyub.accountbook.global.dto.member.AddMemberDto;
+import com.gyub.accountbook.global.dto.member.MemberAccountDto;
 import com.gyub.accountbook.global.dto.member.MemberDto;
 import com.gyub.accountbook.global.dto.member.ModifyMemberDto;
 import com.gyub.accountbook.global.util.SecurityUtil;
@@ -16,10 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MemberController {
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
@@ -31,6 +34,14 @@ public class MemberController {
         return ResponseEntity.ok()
                 .body(memberService.getMemberInfo(email));
     }
+
+    @GetMapping("/member/account")
+    public ResponseEntity<ResultListResponse> findAllByAccountAuthority(HttpServletRequest request) {
+        List<MemberAccountDto> result = memberService.findAllByAccountAuthority();
+        return ResponseEntity.ok()
+                .body(new ResultListResponse(result, result.size(), ""));
+    }
+
 
     @PostMapping("/signup")
     public ResponseEntity<MemberJoinDto> addMember(@RequestBody AddMemberDto memberDto) {

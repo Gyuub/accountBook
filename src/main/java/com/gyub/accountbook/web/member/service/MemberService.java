@@ -1,13 +1,16 @@
 package com.gyub.accountbook.web.member.service;
 
+import com.gyub.accountbook.global.dto.member.MemberAccountDto;
 import com.gyub.accountbook.global.dto.member.MemberDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.EmailDuplicateException;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
+import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.member.domain.Member;
 import com.gyub.accountbook.web.member.domain.MemberAuthority;
 import com.gyub.accountbook.web.member.domain.MemberRole;
 import com.gyub.accountbook.web.member.repository.MemberAuthorityRepository;
+import com.gyub.accountbook.web.member.repository.MemberQueryRepository;
 import com.gyub.accountbook.web.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,11 +26,11 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberQueryRepository memberQueryRepository;
     private final MemberAuthorityRepository memberAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
 
     //==조회==//
-    @Transactional(readOnly = true)
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
@@ -36,12 +40,23 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("memberId : " + memberId, ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
     public MemberDto getMemberInfo(String email) {
         return MemberDto.from(
                 memberRepository.findOneByEmail(email)
                         .orElseThrow(() -> new MemberNotFoundException("email : " + email, ErrorCode.MEMBER_NOT_FOUND))
         );
+    }
+
+    public List<MemberAccountDto> findAllByAccountAuthority(){
+        //사용자 조회
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        List<Member> byEmail = memberQueryRepository.findByEmail(email);
+
+        return
+                byEmail.stream()
+                .map(member -> MemberAccountDto.from(member))
+                .collect(Collectors.toList());
     }
 
     @Transactional

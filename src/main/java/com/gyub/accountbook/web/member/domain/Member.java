@@ -25,7 +25,8 @@ public class Member extends BaseEntity {
     private String password;
 
     @OneToMany(mappedBy = "member")
-    private List<Authority> authoritys = new ArrayList<>();
+    private List<Authority> accountAuthorities = new ArrayList<>();
+
 
     @OneToMany( mappedBy = "member" )
     private Set<MemberAuthority> authorities = new HashSet<>();
