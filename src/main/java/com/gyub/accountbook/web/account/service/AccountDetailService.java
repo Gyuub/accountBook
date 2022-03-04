@@ -1,6 +1,7 @@
 package com.gyub.accountbook.web.account.service;
 
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
+import com.gyub.accountbook.global.dto.account.AccountDetailStatsDto;
 import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.InvalidValueException;
 import com.gyub.accountbook.global.exception.custom.MemberNotFoundException;
@@ -52,6 +53,14 @@ public class AccountDetailService {
                 .stream()
                 .map(accountDetail -> AccountDetailDto.from(accountDetail))
                 .collect(Collectors.toList());
+    }
+    public List<AccountDetailStatsDto> findStatsByAccount(Long accountId, LocalDate dateMonth) {
+
+        validateParameter(dateMonth);
+
+        LocalDateTime from = dateMonth.atTime(0, 0).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime to = dateMonth.atTime(0, 0).with(TemporalAdjusters.lastDayOfMonth());
+        return accountDetailQueryRepository.findStatsByAccount(accountId, from, to);
     }
 
     //내역 생성

@@ -67,6 +67,5 @@ public class AccountController {
     static class AccountResponseDto {
         private ResultListResponse account;
         private ResultListResponse sharing;
-
     }
 }

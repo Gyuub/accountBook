@@ -5,6 +5,7 @@ import com.gyub.accountbook.global.dto.ResultListResponse;
 import com.gyub.accountbook.global.dto.ResultResponse;
 import com.gyub.accountbook.global.dto.account.AccountDetailDto;
 import com.gyub.accountbook.global.dto.account.AccountDetailRequestDto;
+import com.gyub.accountbook.global.dto.account.AccountDetailStatsDto;
 import com.gyub.accountbook.web.account.domain.AccountDetail;
 import com.gyub.accountbook.web.account.service.AccountDetailService;
 import com.gyub.accountbook.web.account.service.AccountService;
@@ -36,13 +37,23 @@ public class AccountDetailController {
     }
 
     @GetMapping("/account/{accountid}")
-    public ResponseEntity<ResultListResponse> getAllAccountDetails(
+    public ResponseEntity<ResultListResponse> findAllAccountDetails(
             @PathVariable(value = "accountid") Long accountId,
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
         List<AccountDetailDto> accountDetails = accountDetailService.findAllByDateMonth(accountId, date);
         return ResponseEntity.ok()
                 .body(new ResultListResponse(accountDetails, accountDetails.size(), ""));
+    }
+    @GetMapping("/account/stats/{accountid}")
+    public ResponseEntity<ResultListResponse> findAllAccountDetailStats(
+            @PathVariable(value = "accountid") Long accountId,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ) {
+        List<AccountDetailStatsDto> statsByAccount = accountDetailService.findStatsByAccount(accountId, date);
+
+        return ResponseEntity.ok()
+                .body(new ResultListResponse(statsByAccount, statsByAccount.size(), ""));
     }
 
     @PostMapping("/account/{accountid}")
@@ -76,5 +87,10 @@ public class AccountDetailController {
                 .body(new ResultResponse("","내역이 삭제 되었습니다."));
     }
 
-
+    @Data
+    @AllArgsConstructor
+    static class AccountDetailResponseDto {
+        private ResultListResponse detail;
+        private ResultListResponse stats;
+    }
 }
