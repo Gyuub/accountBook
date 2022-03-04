@@ -21,7 +21,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class SharingAccountDto {
 
-    private Long id;
+    private Long sharingId;
+    private Long accountId;
     private String email;
     private String nickname;
     private SharingState sharingState;
@@ -29,7 +30,8 @@ public class SharingAccountDto {
 
     public static SharingAccountDto from(Sharing sharing){
         return SharingAccountDto.builder()
-                .id(sharing.getId())
+                .sharingId(sharing.getId())
+                .accountId(sharing.getAccount().getId())
                 .accountName(sharing.getAccount().getName())
                 .email(sharing.getToMember().getEmail())
                 .nickname(sharing.getToMember().getNickname())

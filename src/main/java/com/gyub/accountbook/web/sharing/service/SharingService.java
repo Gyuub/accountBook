@@ -7,6 +7,7 @@ import com.gyub.accountbook.global.exception.ErrorCode;
 import com.gyub.accountbook.global.exception.custom.InvalidValueException;
 import com.gyub.accountbook.global.util.SecurityUtil;
 import com.gyub.accountbook.web.account.domain.Account;
+import com.gyub.accountbook.web.account.repository.AccountRepository;
 import com.gyub.accountbook.web.account.service.AccountService;
 import com.gyub.accountbook.web.authority.domain.Role;
 import com.gyub.accountbook.web.authority.service.AuthorityService;
@@ -34,6 +35,7 @@ public class SharingService {
     private static final Logger logger = LoggerFactory.getLogger(SharingService.class);
 
     private final MemberRepository memberRepository;
+    private final AccountRepository accountRepository;
     private final SharingRepository sharingRepository;
     private final SharingQueryRepository sharingQueryRepository;
 
@@ -55,7 +57,7 @@ public class SharingService {
                 .collect(Collectors.toList());
     }
 
-    public List<SharingAccountDto> findMemberAccountByEmail(){
+    public List<SharingAccountDto> findMemberAccountByEmail() {
         String email = SecurityUtil.getCurrentUserEmail();
         return sharingQueryRepository.findMemberAccountByEmail(email)
                 .stream()
@@ -69,11 +71,20 @@ public class SharingService {
         //유저 정보 조회
         String fromMemberEmail = SecurityUtil.getCurrentUserEmail();
 
+        //본인 가계부 검사
+        validateMyAccount(fromMemberEmail, toMemberEmail);
+
         Member fromMember = memberRepository.findOneByEmail(fromMemberEmail)
                 .orElseThrow(() -> new InvalidValueException("", ErrorCode.MEMBER_NOT_FOUND));
 
         Member toMember = memberRepository.findOneByEmail(toMemberEmail)
-                .orElseThrow(() -> new InvalidValueException("", ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new InvalidValueException("신청 대상이 찾을 수 없습니다.", ErrorCode.MEMBER_NOT_FOUND));
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new InvalidValueException("가계부를 다시 선택 후 신청해 주세요.", ErrorCode.INVALID_VALUE));
+
+        //중복 신청인지 검사
+        validateDuplicateSharing(fromMember, toMember, account);
 
         //공유정보
         Sharing sharing = Sharing.builder()
@@ -87,17 +98,6 @@ public class SharingService {
                 sharingRepository.save(sharing)
         );
     }
-//    public SharingDto save(Long fromMemberId, Long toMemberId, Long accountId) {
-//        Sharing sharing = Sharing.builder()
-//                .toMember(Member.builder().id(toMemberId).build())
-//                .fromMember(Member.builder().id(fromMemberId).build())
-//                .account(Account.builder().id(accountId).build())
-//                .sharingState(SharingState.INVITE)
-//                .build();
-//        return SharingDto.from(
-//                sharingRepository.save(sharing)
-//        );
-//    }
 
     //공유 결과 응답
     @Transactional
@@ -126,7 +126,7 @@ public class SharingService {
     @Transactional
     public void cancelInvite(Long sharingId) {
         Sharing sharing = sharingRepository.findById(sharingId)
-                .orElseThrow(() -> new InvalidValueException("공유 아이디가 잘못 되었음 : ."+ sharingId
+                .orElseThrow(() -> new InvalidValueException("공유 아이디가 잘못 되었음 : ." + sharingId
                         , ErrorCode.INVALID_VALUE));
 
         validateCurrentStateInvite(sharing.getSharingState());
@@ -141,9 +141,22 @@ public class SharingService {
         }
     }
 
-    private void validateCurrentStateInvite(SharingState sharingState){
-        if(!SharingState.INVITE.equals(sharingState)){
-            throw new InvalidValueException("삭제 할 수 없는 상태 : "+ sharingState, ErrorCode.INVALID_VALUE);
+    private void validateCurrentStateInvite(SharingState sharingState) {
+        if (!SharingState.INVITE.equals(sharingState)) {
+            throw new InvalidValueException("삭제 할 수 없는 상태 : " + sharingState, ErrorCode.INVALID_VALUE);
+        }
+    }
+
+    private void validateMyAccount(String fromEmail, String toEamil) {
+        if (fromEmail.equals(toEamil)) {
+            throw new InvalidValueException("공유 하려는 이메일 주소를 확인해 주세요 toEamil : " + toEamil, ErrorCode.INVALID_VALUE);
+        }
+    }
+
+    private void validateDuplicateSharing(Member fromMember, Member toMember, Account account) {
+        if (!sharingRepository.findOneByFromMemberAndToMemberAndAccount(
+                fromMember, toMember, account).isEmpty()){
+            throw new InvalidValueException("이미 공유중인 가계부 입니다.", ErrorCode.INVALID_VALUE);
         }
     }
 }
