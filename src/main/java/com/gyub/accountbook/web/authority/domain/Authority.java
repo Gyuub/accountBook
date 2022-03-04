@@ -35,7 +35,6 @@ public class Authority {
     //==편의 메소드==//
     public void addAccount(Account account){
         this.account = account;
-        account.addAuthority(this);
     }
 
 }

@@ -22,11 +22,10 @@ public class AuthorityController {
 
     //가계부 권한 조회
     @GetMapping("/authority")
-    public ResponseEntity<ResultListResponse> getMyAccountAuthority(){
+    public ResponseEntity<ResultListResponse> getMyAccountAuthority() {
         List<AuthorityDto> myAccounts = authorityService.getMyAccountAuthorities();
 
         return ResponseEntity.ok()
                 .body(new ResultListResponse(myAccounts, myAccounts.size(), ""));
     }
-
 }

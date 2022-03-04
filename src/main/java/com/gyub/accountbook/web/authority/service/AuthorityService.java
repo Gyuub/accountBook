@@ -35,7 +35,6 @@ public class AuthorityService {
 
     public List<AuthorityDto> getMyAccountAuthorities(){
         String email = SecurityUtil.getCurrentUserEmail();
-        List<Authority> byMembers = authorityQueryRepository.findByMembers(email);
 
         return authorityQueryRepository.findByMembers(email).stream()
                 .map(authority -> AuthorityDto.from(authority))
