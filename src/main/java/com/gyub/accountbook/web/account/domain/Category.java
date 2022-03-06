@@ -21,4 +21,10 @@ public class Category {
     @Column(length = 20)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "group_id", length = 10)
+    private AccountDetailRole groupId;
+
+    private Integer priority;
+
 }
