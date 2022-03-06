@@ -64,6 +64,9 @@ public class AccountDetailQueryRepository {
                 .groupBy(
                         accountDetail.category
                 )
+                .orderBy(
+                        accountDetail.amount.sum().desc()
+                )
                 .fetch();
     }
 
