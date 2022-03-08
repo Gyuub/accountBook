@@ -10,23 +10,32 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
-
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    private static final String JWT_SECRET = "GNACCOUNTBOOK";
+
+
+    private static String JWT_SECRET = "GNACCOUNTBOOK";
 
     // 토큰 유효시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;    // 30분
     private static final long JWT_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 7;  // 7일
+
+    @PostConstruct
+    protected void init() {
+        JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
+    }
+
 
     // jwt 토큰 생성
     public String createToken(Authentication authentication) {
