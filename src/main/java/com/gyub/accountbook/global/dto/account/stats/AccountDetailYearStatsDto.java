@@ -1,7 +1,5 @@
-package com.gyub.accountbook.global.dto.account;
+package com.gyub.accountbook.global.dto.account.stats;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gyub.accountbook.web.account.domain.AccountDetail;
 import com.gyub.accountbook.web.account.domain.AccountDetailRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +12,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDetailStatsDto {
+public class AccountDetailYearStatsDto {
 
-    private String categoryName;
-    private Integer amount;
+    private String writeDate;
+    private Integer incomeAmount;
+    private Integer outcomeAmount;
+
 
 }
